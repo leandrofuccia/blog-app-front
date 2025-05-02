@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+/*import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -30,3 +30,28 @@ export default function RootLayout({
     </html>
   );
 }
+
+*/
+
+
+
+
+'use client';
+
+import { GlobalStyle } from "@/styles/globals";
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en">
+      <body>
+        <GlobalStyle />
+        {children}
+      </body>
+    </html>
+  );
+}
+
