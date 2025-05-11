@@ -7,47 +7,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import Header from "@/components/Header"; // Header reutilizável
 import Sidebar from "@/components/Sidebar"; // Sidebar reutilizável
-
-// Estilização
-const Container = styled.div`
-  margin-left: 200px; /* Espaço reservado para a Sidebar */
-  padding: 20px;
-  background-color: ${(props) => props.theme.background};
-  color: ${(props) => props.theme.color};
-  min-height: 100vh;
-`;
-
-const Button = styled.button`
-  margin: 5px;
-  padding: 10px;
-  background-color: ${(props) => props.theme.color};
-  color: ${(props) => props.theme.background};
-  border: 1px solid ${(props) => props.theme.color};
-  border-radius: 5px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: ${(props) => props.theme.background};
-    color: ${(props) => props.theme.color};
-  }
-`;
-
-const PostList = styled.ul`
-  list-style: none;
-  padding: 0;
-`;
-
-const PostItem = styled.li`
-  border: 1px solid ${(props) => props.theme.color};
-  border-radius: 5px;
-  padding: 15px;
-  margin-bottom: 10px;
-  background-color: ${(props) => props.theme.background};
-  color: ${(props) => props.theme.color};
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
+import { Button, Container, PostItemFlex, PostList } from "@/components/Common";
 
 const AdminPage = () => {
   const [theme, setTheme] = useState(lightTheme);
@@ -74,15 +34,7 @@ const AdminPage = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-        /*setUserProfile(response.data.perfilid);
-
-        // Redireciona caso o perfil não seja de professor
-        console.log('response.data.perfil ', response.data.perfilid)
-        if (response.data.perfilid !== 2) {
-          alert("Acesso restrito. Apenas professores podem acessar essa página.");
-          router.push("/posts"); // Redireciona para a página de posts
-        }*/
-
+        
           if (response.data && response.data.length > 0) {
             const usuario = response.data[0]; // Acessa o primeiro item
             console.log("Usuário encontrado:", usuario);
@@ -165,16 +117,16 @@ const AdminPage = () => {
           <Button onClick={handleCreate}>Criar Nova Postagem</Button>
           <PostList>
             {posts.map((post: any) => (
-              <PostItem key={post.id}>
+              <PostItemFlex key={post.id}>
                 <div>
                   <h3>{post.titulo}</h3>
                   <p>{post.conteudo.substring(0, 50)}...</p>
                 </div>
-                <div>
+                <div style={{ display: "flex", gap: "10px" }}>
                   <Button onClick={() => handleEdit(post.id)}>Editar</Button>
                   <Button onClick={() => handleDelete(post.id)}>Excluir</Button>
                 </div>
-              </PostItem>
+              </PostItemFlex>
             ))}
           </PostList>
         </Container>

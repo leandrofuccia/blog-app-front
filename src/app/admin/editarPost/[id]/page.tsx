@@ -9,59 +9,9 @@ import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
 import { Formik, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { Button, Container, ErrorText, Input, StyledForm, Textarea } from "@/components/Common";
 
-// Estilização
-const Container = styled.div`
-  margin-left: 200px;
-  padding: 20px;
-  background-color: ${(props) => props.theme.background};
-  color: ${(props) => props.theme.color};
-  min-height: 100vh;
-`;
 
-const StyledForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  max-width: 600px;
-  margin: 0 auto;
-`;
-
-const Input = styled.input`
-  margin-bottom: 15px;
-  padding: 10px;
-  border: 1px solid ${(props) => props.theme.color};
-  border-radius: 5px;
-  background-color: ${(props) => props.theme.background};
-  color: ${(props) => props.theme.color};
-`;
-
-const Textarea = styled.textarea`
-  margin-bottom: 15px;
-  padding: 10px;
-  border: 1px solid ${(props) => props.theme.color};
-  border-radius: 5px;
-  background-color: ${(props) => props.theme.background};
-  color: ${(props) => props.theme.color};
-`;
-
-const Button = styled.button`
-  padding: 10px;
-  background-color: ${(props) => props.theme.color};
-  color: ${(props) => props.theme.background};
-  border: 1px solid ${(props) => props.theme.color};
-  border-radius: 5px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: ${(props) => props.theme.background};
-    color: ${(props) => props.theme.color};
-  }
-`;
-
-const ErrorText = styled.div`
-  color: red;
-  margin-bottom: 10px;
-`;
 
 const EditPostPage = () => {
   const [theme, setTheme] = useState(lightTheme);
@@ -75,7 +25,7 @@ const EditPostPage = () => {
 
   const validationSchema = Yup.object().shape({
     titulo: Yup.string().required("O título é obrigatório").min(3, "O título deve ter pelo menos 3 caracteres").max(255, "O título deve ter no máximo 255 caracteres"),
-    conteudo: Yup.string().required("O conteúdo é obrigatório").min(10, "O conteúdo deve ter pelo menos 10 caracteres").max(400, "O título deve ter no máximo 4000 caracteres"),
+    conteudo: Yup.string().required("O conteúdo é obrigatório").min(10, "O conteúdo deve ter pelo menos 10 caracteres").max(4000, "O título deve ter no máximo 4000 caracteres"),
   });
 
   useEffect(() => {
@@ -172,3 +122,4 @@ const EditPostPage = () => {
 };
 
 export default EditPostPage;
+
