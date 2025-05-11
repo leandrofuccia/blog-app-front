@@ -352,7 +352,7 @@ export default PostsPage;
 
 */
 
-"use client";
+/*"use client";
 
 import React, { useState, useEffect } from "react";
 import styled, { ThemeProvider } from "styled-components";
@@ -364,7 +364,7 @@ import Sidebar from "@/components/Sidebar"; // Importando o Sidebar
 
 // Estilização
 const Container = styled.div`
-  margin-left: 200px; /* Espaço reservado para a Sidebar */
+  margin-left: 200px; 
   padding: 20px;
   background-color: ${(props) => props.theme.background};
   color: ${(props) => props.theme.color};
@@ -458,7 +458,7 @@ const PostsPage = () => {
   return (
     <ThemeProvider theme={theme}>
       <>
-        {/* Sidebar com links de navegação */}
+        
         <Sidebar
           links={[
             { label: "Posts", href: "/posts" },
@@ -466,7 +466,7 @@ const PostsPage = () => {
           ]}
         />
 
-        {/* Container principal da página */}
+        
         <Container>
           <Header onLogout={handleLogout} onToggleTheme={toggleTheme} />
           <SearchBar
@@ -490,6 +490,187 @@ const PostsPage = () => {
                 </PostItem>
               ))}
             </PostList>
+          </main>
+        </Container>
+      </>
+    </ThemeProvider>
+  );
+};
+
+export default PostsPage;
+
+*/
+
+"use client";
+
+import React, { useState, useEffect } from "react";
+import styled, { ThemeProvider } from "styled-components";
+import { lightTheme, darkTheme } from "@/styles/themes";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import Header from "@/components/Header"; // Importando o Header
+import Sidebar from "@/components/Sidebar"; // Importando o Sidebar
+import { IPostagem } from "@/types/postagem";
+
+// Estilização
+const Container = styled.div`
+  margin-left: 200px; /* Espaço reservado para a Sidebar */
+  padding: 20px;
+  background-color: ${(props) => props.theme.background};
+  color: ${(props) => props.theme.color};
+  min-height: 100vh;
+`;
+
+const SearchBar = styled.input`
+  width: 100%;
+  padding: 10px;
+  margin: 20px 0;
+  border: 1px solid ${(props) => props.theme.color};
+  border-radius: 5px;
+  background-color: ${(props) => props.theme.background};
+  color: ${(props) => props.theme.color};
+`;
+
+const PostList = styled.ul`
+  list-style: none;
+  padding: 0;
+`;
+
+const PostItem = styled.li`
+  border: 1px solid ${(props) => props.theme.color};
+  border-radius: 5px;
+  padding: 15px;
+  margin-bottom: 10px;
+  background-color: ${(props) => props.theme.background};
+  color: ${(props) => props.theme.color};
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${(props) => props.theme.color};
+    color: ${(props) => props.theme.background};
+  }
+`;
+
+const PostsPage = () => {
+  const [theme, setTheme] = useState(lightTheme);
+  const [posts, setPosts] = useState<IPostagem[]>([]);
+  const [filteredPosts, setFilteredPosts] = useState<IPostagem[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const router = useRouter(); // Hook para navegação
+
+  const toggleTheme = () => {
+    setTheme(theme === lightTheme ? darkTheme : lightTheme);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    window.location.href = "/login"; // Redireciona para login
+  };
+
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const query = event.target.value.toLowerCase();
+    setSearchQuery(query);
+
+    const filtered = posts.filter(
+      (post: any) =>
+        post.titulo.toLowerCase().includes(query) ||
+        post.conteudo.toLowerCase().includes(query)
+    );
+    setFilteredPosts(filtered);
+  };
+
+  useEffect(() => {
+    const fetchPosts = async () => {      
+      try {
+        const token = localStorage.getItem("token");
+        
+        const response = await axios.get("/api/postagem", {
+          params: { page: 1, limit: 10 },
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        
+        if (!response.data || response.data.length === 0) {
+          console.error("Nenhuma postagem encontrada na API.");
+          alert("Nenhuma postagem encontrada.");
+          return;
+        }
+        
+        // Buscar nomes dos autores
+        const autoresPromises = response.data.map(async (post: IPostagem): Promise<IPostagem> => {
+          try {
+            
+            const usuarioResponse = await axios.get(`/api/usuario/autorPostagem/${post.usuarioid}`, {
+              headers: { Authorization: `Bearer ${token}` },
+            });
+
+            return { ...post, autorNome: usuarioResponse.data.nome || "Autor desconhecido" };
+          } catch (error) {
+            console.error("Erro ao buscar autor para postagem:", post, error);
+            return { ...post, autorNome: "Erro ao carregar autor" };
+          }
+        });
+
+        const postagensComAutores: IPostagem[] = await Promise.all(autoresPromises);     
+
+        if (!postagensComAutores || postagensComAutores.length === 0) {
+          console.error("Nenhuma postagem encontrada após processamento.");
+        } else {
+          setPosts(postagensComAutores);
+          setFilteredPosts(postagensComAutores);
+        }
+      } catch (error) {
+        console.error("Erro ao buscar postagens:", error);
+
+        if (axios.isAxiosError(error)) {
+          console.error("Detalhes do erro:", error.response?.data || "Sem resposta do servidor.");
+        } else {
+          console.error("Erro inesperado:", error);
+        }
+
+        alert("Erro ao carregar postagens. Verifique o console para mais detalhes.");
+      }
+    };
+    
+    fetchPosts();
+  }, []);
+
+  const redirectToPost = (id: number) => {
+    router.push(`/detalhePost/${id}`); // Redireciona para a página de leitura da postagem
+  };
+
+  return (
+    <ThemeProvider theme={theme}>
+      <>
+        <Sidebar
+          links={[
+            { label: "Posts", href: "/posts" },
+            { label: "Administração", href: "/admin" },
+          ]}
+        />
+
+        <Container>
+          <Header onLogout={handleLogout} onToggleTheme={toggleTheme} />
+          <SearchBar
+            type="text"
+            placeholder="Buscar posts por título ou conteúdo..."
+            value={searchQuery}
+            onChange={handleSearch}
+          />
+          <main>
+            <h2>Lista de Postagens</h2>
+            {filteredPosts.length > 0 ? (
+              <PostList>
+                {filteredPosts.map((post: any) => (
+                  <PostItem key={post.id} onClick={() => redirectToPost(post.id)}>
+                    <h3>{post.titulo}</h3>
+                    <p>{post.conteudo.length > 50 ? `${post.conteudo.substring(0, 50)}...` : post.conteudo}</p>
+                    <small>Autor: {post.autorNome}</small>
+                  </PostItem>
+                ))}
+              </PostList>
+            ) : (
+              <p></p>
+            )}
           </main>
         </Container>
       </>

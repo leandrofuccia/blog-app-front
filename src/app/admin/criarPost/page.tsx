@@ -1,4 +1,4 @@
-"use client";
+/*"use client";
 
 import React, { useState, useEffect } from "react";
 import styled, { ThemeProvider } from "styled-components";
@@ -11,7 +11,7 @@ import jwt from "jsonwebtoken";
 
 // Estilização
 const Container = styled.div`
-  margin-left: 200px; /* Espaço reservado para a Sidebar */
+  margin-left: 200px; 
   padding: 20px;
   background-color: ${(props) => props.theme.background};
   color: ${(props) => props.theme.color};
@@ -208,6 +208,241 @@ const CreatePostPage = () => {
             </Select>
             <Button type="submit">Criar Postagem</Button>
           </Form>
+        </Container>
+      </>
+    </ThemeProvider>
+  );
+};
+
+export default CreatePostPage;
+
+*/
+
+"use client";
+
+import React, { useState, useEffect } from "react";
+import styled, { ThemeProvider } from "styled-components";
+import { lightTheme, darkTheme } from "@/styles/themes";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import Header from "@/components/Header";
+import Sidebar from "@/components/Sidebar";
+import jwt from "jsonwebtoken";
+import { Formik, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+
+// Estilização
+const Container = styled.div`
+  margin-left: 200px;
+  padding: 20px;
+  background-color: ${(props) => props.theme.background};
+  color: ${(props) => props.theme.color};
+  min-height: 100vh;
+`;
+
+const StyledForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  max-width: 600px;
+  margin: 0 auto;
+`;
+
+const Input = styled.input`
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid ${(props) => props.theme.color};
+  border-radius: 5px;
+  background-color: ${(props) => props.theme.background};
+  color: ${(props) => props.theme.color};
+`;
+
+const Textarea = styled.textarea`
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid ${(props) => props.theme.color};
+  border-radius: 5px;
+  background-color: ${(props) => props.theme.background};
+  color: ${(props) => props.theme.color};
+`;
+
+const Select = styled.select`
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid ${(props) => props.theme.color};
+  border-radius: 5px;
+  background-color: ${(props) => props.theme.background};
+  color: ${(props) => props.theme.color};
+`;
+
+const Button = styled.button`
+  padding: 10px;
+  background-color: ${(props) => props.theme.color};
+  color: ${(props) => props.theme.background};
+  border: 1px solid ${(props) => props.theme.color};
+  border-radius: 5px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${(props) => props.theme.background};
+    color: ${(props) => props.theme.color};
+  }
+`;
+
+const ErrorText = styled.div`
+  color: red;
+  margin-bottom: 10px;
+`;
+
+interface FormValues {
+  titulo: string;
+  conteudo: string;
+  autorId: string;
+}
+
+const CreatePostPage = () => {
+  const [theme, setTheme] = useState(lightTheme);
+  const [autores, setAutores] = useState([]);
+  const router = useRouter();
+
+  const validationSchema = Yup.object().shape({
+    titulo: Yup.string()
+      .required("O título é obrigatório")
+      .min(3, "O título deve ter pelo menos 3 caracteres")
+      .max(255, "O título deve ter no máximo 255 caracteres"),
+    conteudo: Yup.string()
+      .required("O conteúdo é obrigatório")
+      .min(10, "O conteúdo deve ter pelo menos 10 caracteres")
+      .max(4000, "O título deve ter no máximo 4000 caracteres"),
+    autorId: Yup.string().required("Selecione um autor."),
+  });
+
+  const toggleTheme = () => {
+    setTheme(theme === lightTheme ? darkTheme : lightTheme);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    window.location.href = "/login";
+  };
+
+  const verifyProfile = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        alert("Token não encontrado. Por favor, faça login novamente.");
+        router.push("/login");
+        return;
+      }
+
+      const decoded = jwt.decode(token) as any;
+      const credencialId = decoded.credencialId;
+
+      const response = await axios.get(`/api/usuario/${credencialId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const usuario = response.data[0];
+      if (usuario.perfilid !== 2) {
+        alert("Acesso restrito. Apenas professores podem acessar essa página.");
+        router.push("/posts");
+      }
+    } catch (error) {
+      console.error("Erro ao verificar perfil do usuário:", error);
+      alert("Erro ao verificar perfil.");
+      router.push("/login");
+    }
+  };
+
+  const fetchAutores = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await axios.get("/api/usuario/autores", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setAutores(response.data);
+    } catch (error) {
+      console.error("Erro ao buscar autores:", error);
+      alert("Erro ao carregar lista de autores.");
+    }
+  };
+
+  useEffect(() => {
+    verifyProfile();
+    fetchAutores();
+  }, []);
+
+  return (
+    <ThemeProvider theme={theme}>
+      <>
+        <Sidebar
+          links={[
+            { label: "Posts", href: "/posts" },
+            { label: "Administração", href: "/admin" },
+          ]}
+        />
+        <Container>
+          <Header onLogout={handleLogout} onToggleTheme={toggleTheme} />
+          <h2>Criar Nova Postagem</h2>
+
+          <Formik<FormValues>
+            initialValues={{ titulo: "", conteudo: "", autorId: "" }}
+            validationSchema={validationSchema}
+            onSubmit={async (values) => {
+              try {
+                const token = localStorage.getItem("token");
+
+                const response = await axios.post(
+                  "/api/createPostagem",
+                  {
+                    titulo: values.titulo,
+                    conteudo: values.conteudo,
+                    usuarioid: values.autorId,
+                  },
+                  {
+                    headers: {
+                      Authorization: `Bearer ${token}`,
+                    },
+                  }
+                );
+
+                alert("Postagem criada com sucesso!");
+                router.push("/admin");
+              } catch (error) {
+                console.error("Erro ao criar postagem:", error);
+                alert("Erro ao criar postagem. Verifique os dados informados.");
+              }
+            }}
+          >
+            {({ handleSubmit }) => (
+              <StyledForm onSubmit={handleSubmit}>
+                <Field as={Input} name="titulo" placeholder="Título" maxLength={255}/>
+                <ErrorMessage name="titulo" component={ErrorText} />
+
+                <Field as={Textarea} name="conteudo" placeholder="Conteúdo" rows={10} maxLength={4000}/>
+                <ErrorMessage name="conteudo" component={ErrorText} />
+
+                <Field as={Select} name="autorId">
+                  <option value="">Selecione o autor</option>
+                  {autores
+                    .filter((autor: any) => autor.perfilid == 2)
+                    .map((autor: any) => (
+                      <option key={autor.id} value={autor.id}>
+                        {autor.nome}
+                      </option>
+                    ))}
+                </Field>
+                <ErrorMessage name="autorId" component={ErrorText} />
+
+                <Button type="submit">Criar Postagem</Button>
+              </StyledForm>
+            )}
+          </Formik>
         </Container>
       </>
     </ThemeProvider>

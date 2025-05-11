@@ -126,7 +126,7 @@ const AdminPage = () => {
   const handleDelete = async (postId: number) => {
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`/api/postagem/${postId}`, {
+      await axios.delete(`/api/deletePostagem/${postId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

@@ -5,5 +5,6 @@ export interface IPostagem {
     usuarioid: number;
     datacriacao?: Date;
     dataatualizacao?: Date;
+    autorNome?: string;
   }
   
