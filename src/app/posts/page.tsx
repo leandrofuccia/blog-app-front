@@ -15,6 +15,7 @@ const PostsPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter();
   const { toggleTheme } = useThemeToggle(); // ← Usa o contexto
+  const [errorMessage, setErrorMessage] = useState<string | null>(null); // Novo estado para mensagens de erro
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.target.value.toLowerCase();
@@ -31,8 +32,8 @@ const PostsPage = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
+        setErrorMessage(null); // Limpa mensagem anterior 
         const token = localStorage.getItem("token");
-
         const response = await axios.get("/api/postagem", {
           params: { page: 1, limit: 10 },
           headers: { Authorization: `Bearer ${token}` },
@@ -52,9 +53,12 @@ const PostsPage = () => {
         const postagensComAutores: IPostagem[] = await Promise.all(autoresPromises);
         setPosts(postagensComAutores);
         setFilteredPosts(postagensComAutores);
-      } catch (error) {
+      } catch (error: any) {
         console.error("Erro ao buscar postagens:", error);
-        alert("Erro ao carregar postagens.");
+        const message = error?.response?.data?.message || 'Erro ao buscar postagens.';
+        setErrorMessage(message);
+        alert(message);
+        
       }
     };
 

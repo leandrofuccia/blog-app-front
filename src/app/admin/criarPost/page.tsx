@@ -21,6 +21,7 @@ interface FormValues {
 const CreatePostPage = () => {
   const [autores, setAutores] = useState([]);
   const router = useRouter();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null); // Novo estado para mensagens de erro
 
   const validationSchema = Yup.object().shape({
     titulo: Yup.string()
@@ -42,7 +43,7 @@ const CreatePostPage = () => {
         router.push("/login");
         return;
       }
-
+      setErrorMessage(null); // Limpa mensagem anterior 
       const decoded = jwt.decode(token) as any;
       const credencialId = decoded.credencialId;
 
@@ -57,17 +58,20 @@ const CreatePostPage = () => {
         alert("Acesso restrito. Apenas professores podem acessar essa página.");
         router.push("/posts");
       }
-    } catch (error) {
+
+    } catch (error: any) {
       console.error("Erro ao verificar perfil do usuário:", error);
-      alert("Erro ao verificar perfil.");
+      const message = error?.response?.data?.message || 'Erro ao verificar perfil do usuário.';
+      setErrorMessage(message);
+      alert(message)
       router.push("/login");
     }
   };
 
   const fetchAutores = async () => {
     try {
+      setErrorMessage(null); // Limpa mensagem anterior 
       const token = localStorage.getItem("token");
-
       const response = await axios.get("/api/usuario/autores", {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -75,9 +79,11 @@ const CreatePostPage = () => {
       });
 
       setAutores(response.data);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Erro ao buscar autores:", error);
-      alert("Erro ao carregar lista de autores.");
+      const message = error?.response?.data?.message || 'Erro ao buscar autores.';
+      setErrorMessage(message);
+      alert(message)
     }
   };
 

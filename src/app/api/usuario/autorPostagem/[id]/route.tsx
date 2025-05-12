@@ -28,8 +28,10 @@ export async function GET(req: Request) {
 
     // Retorna os dados do usuário para o front-end
     return NextResponse.json(response.data, { status: 200 });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Erro ao buscar usuário:", error);
-    return NextResponse.json({ message: "Erro ao buscar usuário" }, { status: 500 });
+    const message = error?.response?.data?.message || 'Erro ao buscar usuário';
+    return NextResponse.json({ message }, { status: 500 });
   }
 }
+

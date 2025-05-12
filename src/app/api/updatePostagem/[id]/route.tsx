@@ -29,9 +29,10 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     return NextResponse.json(response.data, { status: 200 });
   } catch (error: any) {
     console.error("Erro ao editar postagem:", error?.response?.data || error.message);
-    return NextResponse.json(
-      { message: "Erro ao editar postagem", details: error?.response?.data || error.message },
-      { status: 500 }
-    );
+    const message = error?.response?.data?.message || 'Erro ao editar postagem';
+    return NextResponse.json({ message }, { status: 500 });
+
   }
 }
+
+

@@ -11,6 +11,8 @@ import { useThemeToggle } from "@/context/ThemeContext"; // ← Importa o hook
 const AdminPage = () => {
   const [posts, setPosts] = useState([]);
   const [userProfile, setUserProfile] = useState<number | null>(null); // Armazena o perfil do usuário
+  const [errorMessage, setErrorMessage] = useState<string | null>(null); // Novo estado para mensagens de erro
+
   
   const router = useRouter();
 	const { toggleTheme } = useThemeToggle(); // ← Usa o contexto
@@ -18,6 +20,7 @@ const AdminPage = () => {
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
+        setErrorMessage(null); // Limpa mensagem anterior 
         const token = localStorage.getItem("token");
         const credencialId = localStorage.getItem("credencialId"); // Assumindo que o credencialId é armazenado após o login
         const response = await axios.get(`/api/usuario/${credencialId}`, {
@@ -35,20 +38,23 @@ const AdminPage = () => {
               alert("Acesso restrito. Apenas professores podem acessar essa página.");
               router.push("/posts"); // Redireciona para a página de posts
             }
-          } else {
+          } /*else {
             alert("Usuário não encontrado.");
             router.push("/login");
-          }
+          }*/
         
-      } catch (error) {
+      } catch (error: any) {
         console.error("Erro ao verificar perfil do usuário:", error);
-        alert("Erro ao verificar perfil. Faça login novamente.");
+        const message = error?.response?.data?.message || 'Erro ao verificar perfil do usuário.';
+        setErrorMessage(message);
+        alert(message);
         router.push("/login");
       }
     };
 
     const fetchPosts = async () => {
       try {
+        setErrorMessage(null); // Limpa mensagem anterior
         const token = localStorage.getItem("token");
         const response = await axios.get("/api/postagem", {
           headers: {
@@ -56,9 +62,10 @@ const AdminPage = () => {
           },
         });
         setPosts(response.data);
-      } catch (error) {
-        console.error("Erro ao buscar postagens:", error);
-        alert("Erro ao carregar postagens.");
+      } catch (error: any)  {
+        const message = error?.response?.data?.message || 'Erro ao buscar postagens.';
+        setErrorMessage(message);
+        alert(message);
       }
     };
 
@@ -68,6 +75,7 @@ const AdminPage = () => {
 
   const handleDelete = async (postId: number) => {
     try {
+      setErrorMessage(null); // Limpa mensagem anterior
       const token = localStorage.getItem("token");
       await axios.delete(`/api/deletePostagem/${postId}`, {
         headers: {
@@ -76,9 +84,12 @@ const AdminPage = () => {
       });
       setPosts((prevPosts) => prevPosts.filter((post: any) => post.id !== postId));
       alert("Postagem excluída com sucesso!");
-    } catch (error) {
+    } catch (error: any) {
       console.error("Erro ao excluir postagem:", error);
-      alert("Erro ao excluir postagem.");
+      const message = error?.response?.data?.message || 'Erro ao excluir postagem.';
+      setErrorMessage(message);
+      alert(message);
+      
     }
   };
 

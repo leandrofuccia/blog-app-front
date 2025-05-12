@@ -25,10 +25,11 @@ export async function GET(req: Request) {
 
     // Retorna as postagens para o front-end
     return NextResponse.json(response.data, { status: 200 });
-  } catch (error) {
-    console.error("Erro ao buscar postagens:", error);
-    return NextResponse.json({ message: "Erro ao buscar postagens" }, { status: 500 });
+  } catch (error: any) {
+    console.error("Erro ao buscar autores:", error);
+    const message = error?.response?.data?.message || 'Erro ao buscar autores';
+    return NextResponse.json({ message }, { status: 500 });
   }
 }
 
-
+ 

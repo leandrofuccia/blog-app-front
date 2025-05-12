@@ -14,10 +14,12 @@ const ReadPostPage = () => {
   const [post, setPost] = useState<IPostagem | null>(null);
   const params = useParams();
   const { toggleTheme } = useThemeToggle(); // ← Usa o contexto
+  const [errorMessage, setErrorMessage] = useState<string | null>(null); // Novo estado para mensagens de erro
   
   useEffect(() => {
     const fetchPost = async () => {
       try {
+        setErrorMessage(null); // Limpa mensagem anterior 
         const token = localStorage.getItem("token");
 
         // Buscar os dados da postagem
@@ -40,13 +42,19 @@ const ReadPostPage = () => {
 
           // Atualizando o estado da postagem com o nome do autor
           setPost({ ...postData, autorNome });
-        } catch (error) {
+        } catch (error: any) {
           console.error("Erro ao buscar autor para postagem:", error);
+          const message = error?.response?.data?.message || 'Erro ao buscar postagem.';
+          setErrorMessage(message);
+          alert(message);
           setPost({ ...postData, autorNome: "Erro ao carregar autor" });
         }
-      } catch (error) {
+      } catch (error: any) {
         console.error("Erro ao buscar postagem:", error);
-        alert("Erro ao carregar a postagem. Verifique sua autenticação.");
+        const message = error?.response?.data?.message || 'Erro ao buscar postagem.';
+        setErrorMessage(message);
+        alert(message);
+        
       }
     };
 

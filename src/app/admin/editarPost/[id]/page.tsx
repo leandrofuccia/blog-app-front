@@ -20,6 +20,7 @@ const EditPostPage = () => {
   const params = useParams();
   const postId = params.id;
   const { toggleTheme } = useThemeToggle(); // ← Usa o contexto
+  const [errorMessage, setErrorMessage] = useState<string | null>(null); // Novo estado para mensagens de erro
 
   const validationSchema = Yup.object().shape({
     titulo: Yup.string().required("O título é obrigatório").min(3, "O título deve ter pelo menos 3 caracteres").max(255, "O título deve ter no máximo 255 caracteres"),
@@ -29,6 +30,7 @@ const EditPostPage = () => {
   useEffect(() => {
     const fetchPostagem = async () => {
       try {
+        setErrorMessage(null); // Limpa mensagem anterior 
         const token = localStorage.getItem("token");
         const response = await axios.get(`/api/detalhePostagem/${postId}`, {
           headers: { Authorization: `Bearer ${token}` },
@@ -38,23 +40,30 @@ const EditPostPage = () => {
         setInitialValues({ titulo: postagem.titulo, conteudo: postagem.conteudo });
         setAutorId(postagem.usuarioid);
         setIsLoading(false);
-      } catch (error) {
+      } catch (error: any) {
         console.error("Erro ao carregar postagem:", error);
         setIsLoading(false);
-        alert("Erro ao carregar postagem.");
+        const message = error?.response?.data?.message || 'Erro ao carregar postagem.';
+        setErrorMessage(message);
+        alert(message);
+        
       }
     };
 
     const fetchAutores = async () => {
       try {
+        setErrorMessage(null); // Limpa mensagem anterior
         const token = localStorage.getItem("token");
         const response = await axios.get("/api/usuario/autores", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setAutores(response.data);
-      } catch (error) {
+      } catch (error: any) {
         console.error("Erro ao carregar autores:", error);
-        alert("Erro ao carregar lista de autores.");
+        const message = error?.response?.data?.message || 'Erro ao carregar autores.';
+        setErrorMessage(message);
+        alert(message);
+        
       }
     };
 
@@ -64,6 +73,7 @@ const EditPostPage = () => {
 
   const handleSubmit = async (values: { titulo: string; conteudo: string }) => {
     try {
+      setErrorMessage(null); // Limpa mensagem anterior  
       const token = localStorage.getItem("token");
       await axios.put(
         `/api/updatePostagem/${postId}`,
@@ -72,12 +82,14 @@ const EditPostPage = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-
       alert("Postagem editada com sucesso!");
       router.push("/admin");
-    } catch (error) {
+    } catch (error: any) {
       console.error("Erro ao editar postagem:", error);
-      alert("Erro ao editar postagem.");
+      const message = error?.response?.data?.message || 'Erro ao editar postagem.';
+      setErrorMessage(message);
+      alert(message);
+      
     }
   };
 

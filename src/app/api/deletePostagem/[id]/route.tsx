@@ -26,8 +26,14 @@ export async function DELETE(req: Request) {
 
     // Retorna os dados da postagem para o front-end
     return NextResponse.json(response.data, { status: 200 });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Erro ao excluir postagem:", error);
-    return NextResponse.json({ message: "Erro ao excluir postagem" }, { status: 500 });
+    const message = error?.response?.data?.message || 'Erro ao excluir postagem';
+    return NextResponse.json({ message }, { status: 500 });
   }
 }
+
+
+
+    
+    

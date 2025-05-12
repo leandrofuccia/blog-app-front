@@ -26,8 +26,11 @@ export async function GET(req: Request) {
 
     // Retorna os dados da postagem para o front-end
     return NextResponse.json(response.data, { status: 200 });
-  } catch (error) {
+  } catch (error: any) {
+    const message = error?.response?.data?.message || 'Erro ao buscar postagem';
     console.error("Erro ao buscar postagem:", error);
-    return NextResponse.json({ message: "Erro ao buscar postagem" }, { status: 500 });
+    return NextResponse.json({ message }, { status: 500 });
   }
 }
+
+    
