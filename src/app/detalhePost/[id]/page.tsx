@@ -1,30 +1,20 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import styled, { ThemeProvider } from "styled-components";
-import { lightTheme, darkTheme } from "@/styles/themes";
 import axios from "axios";
 import { useParams } from "next/navigation";
 import { IPostagem } from "@/types/postagem";
 import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
 import { Container, PostContent } from "@/components/Common";
-
+import { useThemeToggle } from "@/context/ThemeContext";
 
 const ReadPostPage = () => {
-  const [theme, setTheme] = useState(lightTheme);
+  
   const [post, setPost] = useState<IPostagem | null>(null);
   const params = useParams();
-
-  const toggleTheme = () => {
-    setTheme(theme === lightTheme ? darkTheme : lightTheme);
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    window.location.href = "/login";
-  };
-
+  const { toggleTheme } = useThemeToggle(); // ← Usa o contexto
+  
   useEffect(() => {
     const fetchPost = async () => {
       try {
@@ -67,12 +57,17 @@ const ReadPostPage = () => {
     return <p>Carregando postagem...</p>;
   }
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    window.location.href = "/login";
+  };
+
   return (
-    <ThemeProvider theme={theme}>
       <>
         <Sidebar links={[{ label: "Posts", href: "/posts" }, { label: "Administração", href: "/admin" }]} />
         <Container>
-          <Header onLogout={handleLogout} onToggleTheme={toggleTheme} />
+          <Header onLogout={handleLogout} />
+          <main>
           <PostContent>
             <h2>{post.titulo}</h2>
             <p>{post.conteudo}</p>
@@ -82,9 +77,10 @@ const ReadPostPage = () => {
               Atualizado em: {post.dataatualizacao ? new Date(post.dataatualizacao).toLocaleDateString() : "Nunca atualizado"}
             </small>
           </PostContent>
+		  </main>	
         </Container>
       </>
-    </ThemeProvider>
+    
   );
 };
 

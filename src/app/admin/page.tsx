@@ -1,29 +1,20 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import styled, { ThemeProvider } from "styled-components";
-import { lightTheme, darkTheme } from "@/styles/themes";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import Header from "@/components/Header"; // Header reutilizável
-import Sidebar from "@/components/Sidebar"; // Sidebar reutilizável
+import Header from "@/components/Header";
+import Sidebar from "@/components/Sidebar";
 import { Button, Container, PostItemFlex, PostList } from "@/components/Common";
+import { useThemeToggle } from "@/context/ThemeContext"; // ← Importa o hook
 
 const AdminPage = () => {
-  const [theme, setTheme] = useState(lightTheme);
   const [posts, setPosts] = useState([]);
   const [userProfile, setUserProfile] = useState<number | null>(null); // Armazena o perfil do usuário
+  
   const router = useRouter();
-
-  const toggleTheme = () => {
-    setTheme(theme === lightTheme ? darkTheme : lightTheme);
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    window.location.href = "/login"; // Redireciona para login
-  };
-
+	const { toggleTheme } = useThemeToggle(); // ← Usa o contexto
+  
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
@@ -98,23 +89,25 @@ const AdminPage = () => {
   const handleCreate = () => {
     router.push("/admin/criarPost"); // Redireciona para a página de criação
   };
+  
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    window.location.href = "/login";
+  };
 
   return (
-    <ThemeProvider theme={theme}>
-      <>
-        {/* Sidebar com os links de navegação */}
-        <Sidebar
+   <>
+       <Sidebar
           links={[
             { label: "Posts", href: "/posts" },
             { label: "Administração", href: "/admin" },
           ]}
         />
-        
-        {/* Container principal */}
         <Container>
-          <Header onLogout={handleLogout} onToggleTheme={toggleTheme} />
+          <Header onLogout={handleLogout} />
           <h2>Administração de Postagens</h2>
           <Button onClick={handleCreate}>Criar Nova Postagem</Button>
+          <main>
           <PostList>
             {posts.map((post: any) => (
               <PostItemFlex key={post.id}>
@@ -129,10 +122,13 @@ const AdminPage = () => {
               </PostItemFlex>
             ))}
           </PostList>
-        </Container>
+         </main>
+        </Container> 
       </>
-    </ThemeProvider>
+    
   );
 };
 
 export default AdminPage;
+
+

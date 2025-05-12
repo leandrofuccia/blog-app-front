@@ -36,7 +36,7 @@ export default function RootLayout({
 
 
 
-'use client';
+/*'use client';
 
 import { GlobalStyle } from "@/styles/globals";
 
@@ -50,6 +50,54 @@ export default function RootLayout({
       <body>
         <GlobalStyle />
         {children}
+      </body>
+    </html>
+  );
+}
+*/
+
+/*'use client';
+
+import { GlobalStyle } from "@/styles/globals";
+import { useThemeToggle } from "@/context/ThemeContext";
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  const { isDark } = useThemeToggle(); // agora você tem acesso ao estado do tema
+
+  return (
+    <html lang="en">
+      <body>
+        
+        <GlobalStyle />
+        {children}
+      </body>
+    </html>
+  );
+}
+
+*/
+
+"use client";
+
+import { ThemeContextProvider } from "@/context/ThemeContext";
+import { GlobalStyle } from "@/styles/globals";
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="pt-BR">
+      <body>
+        <ThemeContextProvider>
+          <GlobalStyle />
+          {children}
+        </ThemeContextProvider>
       </body>
     </html>
   );

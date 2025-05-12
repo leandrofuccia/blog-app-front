@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import styled, { ThemeProvider } from "styled-components";
-import { lightTheme, darkTheme } from "@/styles/themes";
+
+
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
@@ -19,7 +19,6 @@ interface FormValues {
 }
 
 const CreatePostPage = () => {
-  const [theme, setTheme] = useState(lightTheme);
   const [autores, setAutores] = useState([]);
   const router = useRouter();
 
@@ -34,15 +33,6 @@ const CreatePostPage = () => {
       .max(4000, "O título deve ter no máximo 4000 caracteres"),
     autorId: Yup.string().required("Selecione um autor."),
   });
-
-  const toggleTheme = () => {
-    setTheme(theme === lightTheme ? darkTheme : lightTheme);
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    window.location.href = "/login";
-  };
 
   const verifyProfile = async () => {
     try {
@@ -96,19 +86,18 @@ const CreatePostPage = () => {
     fetchAutores();
   }, []);
 
+  
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    window.location.href = "/login";
+  };
+  
   return (
-    <ThemeProvider theme={theme}>
       <>
-        <Sidebar
-          links={[
-            { label: "Posts", href: "/posts" },
-            { label: "Administração", href: "/admin" },
-          ]}
-        />
+        <Sidebar links={[{ label: "Posts", href: "/posts" }, { label: "Administração", href: "/admin" }]} />
         <Container>
-          <Header onLogout={handleLogout} onToggleTheme={toggleTheme} />
+          <Header onLogout={handleLogout}/>
           <h2>Criar Nova Postagem</h2>
-
           <Formik<FormValues>
             initialValues={{ titulo: "", conteudo: "", autorId: "" }}
             validationSchema={validationSchema}
@@ -139,32 +128,34 @@ const CreatePostPage = () => {
             }}
           >
             {({ handleSubmit }) => (
-              <StyledForm onSubmit={handleSubmit}>
-                <Field as={Input} name="titulo" placeholder="Título" maxLength={255}/>
-                <ErrorMessage name="titulo" component={ErrorText} />
+              <main>	
+                <StyledForm onSubmit={handleSubmit}>
+                  <Field as={Input} name="titulo" placeholder="Título" maxLength={255}/>
+                  <ErrorMessage name="titulo" component={ErrorText} />
 
-                <Field as={Textarea} name="conteudo" placeholder="Conteúdo" rows={10} maxLength={4000}/>
-                <ErrorMessage name="conteudo" component={ErrorText} />
+                  <Field as={Textarea} name="conteudo" placeholder="Conteúdo" rows={10} maxLength={4000}/>
+                  <ErrorMessage name="conteudo" component={ErrorText} />
 
-                <Field as={Select} name="autorId">
-                  <option value="">Selecione o autor</option>
-                  {autores
-                    .filter((autor: any) => autor.perfilid == 2)
-                    .map((autor: any) => (
-                      <option key={autor.id} value={autor.id}>
-                        {autor.nome}
-                      </option>
-                    ))}
-                </Field>
-                <ErrorMessage name="autorId" component={ErrorText} />
+                  <Field as={Select} name="autorId">
+                    <option value="">Selecione o autor</option>
+                    {autores
+                      .filter((autor: any) => autor.perfilid == 2)
+                      .map((autor: any) => (
+                        <option key={autor.id} value={autor.id}>
+                          {autor.nome}
+                        </option>
+                      ))}
+                  </Field>
+                  <ErrorMessage name="autorId" component={ErrorText} />
 
-                <Button type="submit">Criar Postagem</Button>
-              </StyledForm>
+                  <Button type="submit">Criar Postagem</Button>
+                </StyledForm>
+             </main> 
             )}
           </Formik>
         </Container>
       </>
-    </ThemeProvider>
+   
   );
 };
 

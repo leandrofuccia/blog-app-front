@@ -40,7 +40,7 @@ export const Textarea = styled.textarea`
 `;
 
 // Botão
-export const Button = styled.button`
+/*export const Button = styled.button`
   padding: 10px;
   background-color: ${(props) => props.theme.color};
   color: ${(props) => props.theme.background};
@@ -51,6 +51,21 @@ export const Button = styled.button`
   &:hover {
     background-color: ${(props) => props.theme.background};
     color: ${(props) => props.theme.color};
+  }
+`;*/
+
+export const Button = styled.button`
+  background: transparent;
+  color: ${(props) => props.theme.color};
+  border: 1px solid ${(props) => props.theme.color};
+  border-radius: 5px;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+
+  &:hover {
+    background-color: ${(props) => props.theme.color};
+    color: ${(props) => props.theme.background};
   }
 `;
 
