@@ -165,7 +165,7 @@ export const ParagraphStyled = styled(Paragraph)`
   font-size: ${(props) => props.theme.fontSizes.p};
 `;
 
-export { Heading2, Heading3, Paragraph };
+export { Heading2, Heading3, Paragraph, ButtonGroup };
 
 export const MainWrapper = styled.div`
   margin-left: 250px;
@@ -201,6 +201,13 @@ export const SuccessPopup = styled.div`
 export const ErrorPopup = styled(SuccessPopup)`
   background-color: #f44336; /* vermelho */
 `;
+
+const ButtonGroup = styled.div`
+  display: flex;
+  gap: 10px;
+  align-items: center;
+`;
+
 
 
 

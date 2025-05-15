@@ -8,12 +8,14 @@ import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
 import { MainWrapper, PostContent } from "@/components/Common";
 import { useThemeToggle } from "@/context/ThemeContext";
+import Loading from "@/components/Loading";
 
 const ReadPostPage = () => {
   const [post, setPost] = useState<IPostagem | null>(null);
   const params = useParams();
   const { toggleTheme } = useThemeToggle();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -37,30 +39,31 @@ const ReadPostPage = () => {
 
           const autorNome = usuarioResponse.data?.nome || "Autor desconhecido";
           setPost({ ...postData, autorNome });
+          setIsLoading(false);
         } catch (error: any) {
           const message = error?.response?.data?.message || "Erro ao buscar autor.";
           setErrorMessage(message);
-          alert(message);
-          setPost({ ...postData, autorNome: "Erro ao carregar autor" });
+          setIsLoading(false);
         }
       } catch (error: any) {
         const message = error?.response?.data?.message || "Erro ao buscar postagem.";
         setErrorMessage(message);
-        alert(message);
+        setIsLoading(false);
       }
     };
 
     fetchPost();
   }, [params.id]);
 
-  if (!post) {
-    return <p>Carregando postagem...</p>;
-  }
-
+  
   const handleLogout = () => {
     localStorage.removeItem("token");
     window.location.href = "/login";
   };
+
+  if (isLoading || !post) {
+    return <Loading />;
+  }
 
   return (
     <>

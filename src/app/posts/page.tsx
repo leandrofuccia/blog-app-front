@@ -13,6 +13,7 @@ import {
   SearchBar,
 } from "@/components/Common";
 import { useThemeToggle } from "@/context/ThemeContext";
+import Loading from "@/components/Loading";
 
 const PostsPage = () => {
   const [posts, setPosts] = useState<IPostagem[]>([]);
@@ -21,6 +22,7 @@ const PostsPage = () => {
   const router = useRouter();
   const { toggleTheme } = useThemeToggle();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.target.value.toLowerCase();
@@ -64,12 +66,12 @@ const PostsPage = () => {
         const postagensComAutores: IPostagem[] = await Promise.all(autoresPromises);
         setPosts(postagensComAutores);
         setFilteredPosts(postagensComAutores);
+        setIsLoading(false);
       } catch (error: any) {
         console.error("Erro ao buscar postagens:", error);
-        const message =
-          error?.response?.data?.message || "Erro ao buscar postagens.";
+        const message = error?.response?.data?.message || "Erro ao buscar postagens.";
         setErrorMessage(message);
-        alert(message);
+        setIsLoading(false);
       }
     };
 
@@ -84,6 +86,10 @@ const PostsPage = () => {
     localStorage.removeItem("token");
     window.location.href = "/login";
   };
+
+  if (isLoading || !filteredPosts) {
+    return <Loading />;
+  }
 
   return (
     <>

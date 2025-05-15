@@ -19,6 +19,7 @@ import {
   SuccessPopup,
   ErrorPopup,
 } from "@/components/Common";
+import Loading from "@/components/Loading";
 
 interface FormValues {
   titulo: string;
@@ -31,6 +32,7 @@ const CreatePostPage = () => {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const router = useRouter();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const validationSchema = Yup.object().shape({
     titulo: Yup.string()
@@ -83,12 +85,12 @@ const CreatePostPage = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-
       setAutores(response.data);
+      setIsLoading(false);
     } catch (error: any) {
       const message = error?.response?.data?.message || "Erro ao buscar autores.";
       setErrorMessage(message);
-      
+      setIsLoading(false);
     }
   };
 
@@ -101,6 +103,10 @@ const CreatePostPage = () => {
     localStorage.removeItem("token");
     window.location.href = "/login";
   };
+
+  if (isLoading || !autores) {
+    return <Loading />;
+  }
 
   return (
     <>

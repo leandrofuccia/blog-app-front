@@ -15,17 +15,22 @@ import {
   HeaderActions,
   ResponsiveContainer,
   MainWrapper,
+  ButtonGroup,
+  
   
 } from "@/components/Common";
 import { useThemeToggle } from "@/context/ThemeContext";
+import Loading from "@/components/Loading";
+import IconButton from "@/components/IconButton";
 
 const AdminPage = () => {
   const [posts, setPosts] = useState([]);
   const [userProfile, setUserProfile] = useState<number | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
   const router = useRouter();
   const { toggleTheme } = useThemeToggle();
+  const [isLoading, setIsLoading] = useState(true);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -69,10 +74,11 @@ const AdminPage = () => {
           },
         });
         setPosts(response.data);
+        setIsLoading(false);
       } catch (error: any) {
         const message = error?.response?.data?.message || 'Erro ao buscar postagens.';
         setErrorMessage(message);
-        alert(message);
+        setIsLoading(false);
       }
     };
 
@@ -90,12 +96,13 @@ const AdminPage = () => {
         },
       });
       setPosts((prevPosts) => prevPosts.filter((post: any) => post.id !== postId));
-      alert("Postagem excluída com sucesso!");
+      alert("Postagem excuida com sucesso!");
+      
     } catch (error: any) {
       console.error("Erro ao excluir postagem:", error);
       const message = error?.response?.data?.message || 'Erro ao excluir postagem.';
       setErrorMessage(message);
-      alert(message);
+      
     }
   };
 
@@ -111,8 +118,10 @@ const AdminPage = () => {
     localStorage.removeItem("token");
     window.location.href = "/login";
   };
-
   
+  if (isLoading || !posts) {
+    return <Loading />;
+  }
 
   return (
     <>
@@ -122,7 +131,15 @@ const AdminPage = () => {
         <ResponsiveContainer>
           <HeaderActions>
             <Heading2>Administração de Postagens</Heading2>
-            <Button onClick={handleCreate}>Criar Nova Postagem</Button>
+            <IconButton
+              icon= "/icons/add.svg"
+              alt=""
+              tooltip=""
+              label="Criar Nova Postagem"
+              onClick={handleCreate}
+              showLabel = "side"
+              labelSize="lg"
+            />
           </HeaderActions>
         </ResponsiveContainer>
         <main>
@@ -134,8 +151,24 @@ const AdminPage = () => {
                   <Paragraph>{post.conteudo.substring(0, 50)}...</Paragraph>
                 </div>
                 <div style={{ display: "flex", gap: "10px" }}>
-                  <Button onClick={() => handleEdit(post.id)}>Editar</Button>
-                  <Button onClick={() => handleDelete(post.id)}>Excluir</Button>
+                  <ButtonGroup>
+                    <IconButton
+                      icon= "/icons/edit.svg"
+                      alt=""
+                      tooltip="Editar"
+                      label="Editar"
+                      onClick={() => handleEdit(post.id)}
+                    />
+
+                     <IconButton
+                      icon= "/icons/delete.png"
+                      alt=""
+                      tooltip="Excluir"
+                      label="Excluir"
+                      onClick={() => handleDelete(post.id)}
+                    />
+                  </ButtonGroup>
+
                 </div>
               </PostItemFlex>
             ))}

@@ -42,6 +42,7 @@ export const lightTheme: DefaultTheme = {
       border: '1px solid #0070f3',
     },
   },
+  
 };
 
 export const darkTheme: DefaultTheme = {

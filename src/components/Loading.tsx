@@ -25,7 +25,7 @@ const LoadingImage = styled.img`
 const Loading = () => {
   return (
     <LoadingContainer>
-      <LoadingImage src="/loading.gif" alt="Carregando..." />
+      <LoadingImage src="/icons/loading.svg" alt="Carregando..." />
     </LoadingContainer>
   );
 };
