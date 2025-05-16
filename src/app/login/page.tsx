@@ -51,6 +51,22 @@ const Button = styled.button`
   }
 `;
 
+const RegisterLink = styled.p`
+  margin-top: 12px;
+  font-size: 14px;
+  text-align: center;
+
+  a {
+    color: #0070f3;
+    text-decoration: underline;
+    cursor: pointer;
+
+    &:hover {
+      color: #005bb5;
+    }
+  }
+`;
+
 
 const LoginPage = () => {
   const router = useRouter();
@@ -114,6 +130,10 @@ const LoginPage = () => {
             {errorMessage && <StyledErrorMessage>{errorMessage}</StyledErrorMessage>} {/* Exibe o erro do backend */}
 
             <Button type="submit">Entrar</Button>
+
+            <RegisterLink>
+                Não tem uma conta? <a onClick={() => router.push('/registrar')}>Criar conta</a>
+            </RegisterLink>
           </StyledForm>
         )}
       </Formik>
