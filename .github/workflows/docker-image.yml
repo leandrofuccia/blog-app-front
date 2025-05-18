@@ -41,12 +41,12 @@ jobs:
 
       - name: Build Next.js application
         run: npm run build
-
+	
       - name: Verificar container existente do compose
-        run: docker ps -a | grep blog_app_front && docker rm -f blog_app_front || true
-
+        run: docker ps -a | grep blog_app_front && docker rm -f blog_app_front || true	
+	
       - name: Build da imagem Docker
-        run: docker build -t my-blog-app-front.
+        run: docker build -t my-blog-app-front .
 
       - name: Login no Docker Hub
         run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
@@ -59,15 +59,4 @@ jobs:
 
       - name: Encerra os containers do docker compose
         if: always()
-        run: docker compose down      
-
-  
-
-
-
-
-
-  
-
-
-
+        run: docker compose down       
