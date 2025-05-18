@@ -9,7 +9,7 @@ services:
       - "3000:3000"
     environment:
       NODE_ENV: development  
-      BACKEND_URL: http://blog_app:3002  # Agora acessando o back-end corretamente
+      NEXT_PUBLIC_API_URL: http://blog_app:3002  # Agora acessando o back-end corretamente
     volumes:
       - .:/app
       - /app/node_modules

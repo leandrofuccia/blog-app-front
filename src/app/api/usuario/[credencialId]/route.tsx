@@ -3,6 +3,7 @@ import axios from "axios";
 
 export async function GET(req: Request) {
   try {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL + '/usuario/credencial/';
     const url = new URL(req.url);
     const credencialId = url.pathname.split("/").pop(); // Extrai o ID da URL
 
@@ -18,7 +19,8 @@ export async function GET(req: Request) {
     console.log("Credencial ID recebido:", credencialId);
 
     // Faz a chamada ao back-end para buscar o perfil do usuário
-    const response = await axios.get(`http://localhost:3002/usuario/credencial/${credencialId}`, {
+    //const response = await axios.get(`http://localhost:3002/usuario/credencial/${credencialId}`, {
+    const response = await axios.get(apiUrl+`${credencialId}`, {
       headers: {
         Authorization: token, // Inclui o token no cabeçalho
       },

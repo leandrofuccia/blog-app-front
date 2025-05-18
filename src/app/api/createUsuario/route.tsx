@@ -3,6 +3,8 @@ import axios from "axios";
 
 export async function POST(req: Request) {
   try {
+    
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL + '/usuario';
     const body = await req.json();
     const { nome, perfilid, credencialId } = body;
 
@@ -28,8 +30,8 @@ export async function POST(req: Request) {
       );
     }
 
-    const response = await axios.post(
-      "http://localhost:3002/usuario",
+    //const response = await axios.post("http://blog_app:3002/usuario",
+    const response = await axios.post(apiUrl,
       { nome, perfilid, credencialId },
       {
         headers: {

@@ -4,6 +4,7 @@ import { console } from "inspector";
 
 export async function GET(req: Request) {
   try {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL + '/posts/';
     const url = new URL(req.url);
     const id = url.pathname.split("/").pop(); // Extrai o ID da URL
     console.log('entrou aqui datalhePostagem route.tsx')
@@ -18,7 +19,8 @@ export async function GET(req: Request) {
     }
 
     // Faz a chamada ao back-end para buscar a postagem
-    const response = await axios.get(`http://localhost:3002/posts/${id}`, {
+    //const response = await axios.get(`http://localhost:3002/posts/${id}`, {
+    const response = await axios.get(apiUrl+ `${id}`, {
       headers: {
         Authorization: token,
       },

@@ -4,6 +4,7 @@ import { console } from "inspector";
 
 export async function DELETE(req: Request) {
   try {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL + '/posts/';
     const url = new URL(req.url);
     const id = url.pathname.split("/").pop(); // Extrai o ID da URL
     console.log('entrou aqui route.tsx exclusão id ' , id)
@@ -18,7 +19,8 @@ export async function DELETE(req: Request) {
     }
 
     // Faz a chamada ao back-end para buscar a postagem
-    const response = await axios.delete(`http://localhost:3002/posts/${id}`, {
+    //const response = await axios.delete(`http://localhost:3002/posts/${id}`, {
+    const response = await axios.delete(apiUrl + `${id}`, {
       headers: {
         Authorization: token,
       },

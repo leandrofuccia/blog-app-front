@@ -3,6 +3,7 @@ import axios from "axios";
 
 export async function GET(req: Request) {
   try {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL + '/posts';
     const url = new URL(req.url);
     const page = url.searchParams.get("page") || 1;
     const limit = url.searchParams.get("limit") || 10;
@@ -15,7 +16,8 @@ export async function GET(req: Request) {
     }
 
     // Faz a chamada ao back-end com o token no cabeçalho
-    const response = await axios.get("http://localhost:3002/posts", {
+    //const response = await axios.get("http://localhost:3002/posts", {
+    const response = await axios.get(apiUrl, {
       params: { page, limit },
       headers: {
         Authorization: token, // Inclui o token no cabeçalho

@@ -3,6 +3,7 @@ import axios from "axios";
 
 export async function PUT(req: NextRequest) {
   try {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL + '/posts/';
     const url = new URL(req.url);
     const id = url.pathname.split("/").pop(); // Extrai o ID da URL
     const body = await req.json();
@@ -16,10 +17,9 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json({ message: "Token não fornecido" }, { status: 401 });
     }
 
-    // Envia os dados para o back-end
-    const response = await axios.put(
-      `http://localhost:3002/posts/${id}`, // ou endpoint correto
-      body,
+    //const response = await axios.put(`http://localhost:3002/posts/${id}`, 
+    const response = await axios.put(apiUrl+`${id}`,
+    body,
       {
         headers: {
           Authorization: token,

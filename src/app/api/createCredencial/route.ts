@@ -3,6 +3,7 @@ import axios from "axios";
 
 export async function POST(req: Request) {
   try {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL + '/credencial';
     const body = await req.json();
     const { username, password} = body;
 
@@ -15,8 +16,8 @@ export async function POST(req: Request) {
       );
     }
     
-    const response = await axios.post(
-      "http://localhost:3002/credencial",
+    //const response = await axios.post("http://localhost:3002/credencial",
+    const response = await axios.post(apiUrl,
       { username, password },
       
     );
