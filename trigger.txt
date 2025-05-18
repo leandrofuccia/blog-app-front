@@ -1,0 +1,4 @@
+echo $(date) > trigger.txt
+git add trigger.txt
+git commit -m "Forçando GitHub Actions"
+git push origin main
