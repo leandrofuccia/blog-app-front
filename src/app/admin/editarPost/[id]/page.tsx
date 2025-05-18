@@ -9,7 +9,6 @@ import { Formik, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import {
   Button,
-  Container,
   ErrorText,
   Input,
   MainWrapper,
@@ -23,7 +22,7 @@ import { useThemeToggle } from "@/context/ThemeContext";
 
 const EditPostPage = () => {
   const [autorId, setAutorId] = useState("");
-  const [autores, setAutores] = useState([]);
+  const [, setAutores] = useState([]);
   const [initialValues, setInitialValues] = useState<{ titulo: string; conteudo: string } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -32,7 +31,7 @@ const EditPostPage = () => {
   const router = useRouter();
   const params = useParams();
   const postId = params.id;
-  const { toggleTheme } = useThemeToggle();
+  //const { toggleTheme } = useThemeToggle();
 
   const validationSchema = Yup.object().shape({
     titulo: Yup.string()

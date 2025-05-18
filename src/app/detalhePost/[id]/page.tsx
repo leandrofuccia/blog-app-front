@@ -13,7 +13,6 @@ import Loading from "@/components/Loading";
 const ReadPostPage = () => {
   const [post, setPost] = useState<IPostagem | null>(null);
   const params = useParams();
-  const { toggleTheme } = useThemeToggle();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 

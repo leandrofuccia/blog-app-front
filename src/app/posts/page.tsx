@@ -20,7 +20,6 @@ const PostsPage = () => {
   const [filteredPosts, setFilteredPosts] = useState<IPostagem[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter();
-  const { toggleTheme } = useThemeToggle();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 

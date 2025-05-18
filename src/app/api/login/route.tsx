@@ -29,7 +29,7 @@ export async function POST(req: Request) {
   try {
     const { username, password } = await req.json();
 
-    const response = await axios.post('http://localhost:3002/credencial/signin', {
+    const response = await axios.post('http://127.0.0.1:3002/credencial/signin', {
       username,
       password,
     });

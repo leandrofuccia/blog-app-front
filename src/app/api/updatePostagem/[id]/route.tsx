@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import axios from "axios";
 
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(req: NextRequest) {
   try {
-    const id = params.id;
+    const url = new URL(req.url);
+    const id = url.pathname.split("/").pop(); // Extrai o ID da URL
     const body = await req.json();
 
     if (!id) {
@@ -34,5 +35,6 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
 
   }
 }
+
 
 

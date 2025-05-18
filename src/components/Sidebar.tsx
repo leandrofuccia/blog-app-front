@@ -33,7 +33,7 @@ const SidebarWrapper = styled.div<{ $isOpen: boolean }>`
   }
 `;
 
-const MainWrapper = styled.main`
+/*const MainWrapper = styled.main`
   margin-left: 250px;
   padding: 16px;
 
@@ -41,7 +41,7 @@ const MainWrapper = styled.main`
     margin-left: 0;
   }
 `;
-
+*/
 const ToggleButton = styled.button`
   position: fixed;
   top: 16px;

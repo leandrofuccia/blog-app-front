@@ -8,8 +8,7 @@ import Header from "@/components/Header";
 import {
   Heading2,
   Heading3,
-  Paragraph,
-  Button,
+  Paragraph,  
   PostItemFlex,
   PostList,
   HeaderActions,
@@ -28,7 +27,6 @@ const AdminPage = () => {
   const [userProfile, setUserProfile] = useState<number | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const router = useRouter();
-  const { toggleTheme } = useThemeToggle();
   const [isLoading, setIsLoading] = useState(true);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 

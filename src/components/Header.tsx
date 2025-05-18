@@ -70,7 +70,7 @@ export default Header;
 
 import React from "react";
 import styled from "styled-components";
-import { Title, ButtonText } from "./Typography";
+import { Title } from "./Typography";
 import { useThemeToggle } from "@/context/ThemeContext";
 import {ButtonGroup} from "@/components/Common"
 import IconButton from "./IconButton";
@@ -91,7 +91,7 @@ const HeaderContainer = styled.header`
   }
 `;
 
-const HeaderButton = styled.button`
+/*const HeaderButton = styled.button`
   background: transparent;
   color: ${(props) => props.theme.colors.primary};
   border: 1px solid ${(props) => props.theme.colors.primary};
@@ -105,7 +105,7 @@ const HeaderButton = styled.button`
     color: ${(props) => props.theme.colors.background};
   }
 `;
-
+*/
 
 
 interface HeaderProps {

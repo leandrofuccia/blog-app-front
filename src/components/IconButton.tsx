@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import styled, { DefaultTheme, useTheme } from "styled-components";
+import styled, { DefaultTheme } from "styled-components";
 
 type LabelPosition = "none" | "side" | "below";
 type FontSizeToken = keyof DefaultTheme["fontSizes"];
