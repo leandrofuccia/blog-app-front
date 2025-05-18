@@ -41,8 +41,8 @@ jobs:
 
       - name: Build Next.js application
         run: npm run build
-
-      - name: Verificando container existente do compose djdjddjdjdjdj
+        
+      - name: Verificando container existente do compose
         run: docker ps -a | grep blog_app_front && docker rm -f blog_app_front || true
         
       - name: Build da imagem Docker
