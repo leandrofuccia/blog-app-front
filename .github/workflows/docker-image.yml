@@ -17,8 +17,8 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
-          
+          node-version: 22  # Sem aspas para evitar erros
+      
       - name: Verificar versão do Docker
         run: docker --version
         
@@ -41,10 +41,10 @@ jobs:
 
       - name: Build Next.js application
         run: npm run build
-	
+
       - name: Verificar container existente do compose
         run: docker ps -a | grep blog_app_front && docker rm -f blog_app_front || true	
-	
+
       - name: Build da imagem Docker
         run: docker build -t my-blog-app-front .
 
@@ -55,16 +55,10 @@ jobs:
         run: docker push leandrofuccia/blog-app-front:${{ env.TIMESTAMP }}
       
       - name: Adicionar tag latest à imagem
-        run: docker tag leandrofuccia/blog-app-front:${{ env.TIMESTAMP }} leandrofuccia/blog-app-front:latest; docker push leandrofuccia/blog-app-front:latest
+        run: |
+          docker tag leandrofuccia/blog-app-front:${{ env.TIMESTAMP }} leandrofuccia/blog-app-front:latest
+          docker push leandrofuccia/blog-app-front:latest
 
       - name: Encerra os containers do docker compose
-        if: always()
+        if: always()  # Corrigido alinhamento do "if"
         run: docker compose down
-	    
-
-        
-
-
-
-
-
