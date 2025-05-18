@@ -44,7 +44,7 @@ jobs:
 
       - name: Verificar container existente do compose
         run: docker ps -a | grep blog_app_front && docker rm -f blog_app_front || true	
-        	
+
       - name: Build da imagem Docker
         run: docker build -t my-blog-app-front .
 
