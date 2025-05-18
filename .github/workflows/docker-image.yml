@@ -60,3 +60,7 @@ jobs:
       - name: Encerra os containers do docker compose
         if: always()
         run: docker compose down
+
+
+
+      - name: teste
