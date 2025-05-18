@@ -2,9 +2,11 @@ name: Deploy Next.js App
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main  # Ajuste para garantir que está corretamente formatado
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
   build:
@@ -17,8 +19,8 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
-          
+          node-version: 22  # Sem aspas para evitar problemas
+      
       - name: Verificar versão do Docker
         run: docker --version
         
@@ -54,9 +56,11 @@ jobs:
       - name: Push da imagem para o Docker Hub
         run: docker push leandrofuccia/blog-app-front:${{ env.TIMESTAMP }}
       
-      - name: Adicionar tag latest a imagem
-        run: docker tag leandrofuccia/blog-app-front:${{ env.TIMESTAMP }} leandrofuccia/blog-app-front:latest; docker push leandrofuccia/blog-app-front:latest
+      - name: Adicionar tag latest à imagem
+        run: |
+          docker tag leandrofuccia/blog-app-front:${{ env.TIMESTAMP }} leandrofuccia/blog-app-front:latest
+          docker push leandrofuccia/blog-app-front:latest
 
       - name: Encerra os containers do docker compose
-        if: always() 
+        if: always()  # Corrigido alinhamento do "if"
         run: docker compose down
