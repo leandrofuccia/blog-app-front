@@ -4,6 +4,7 @@ import axios from "axios";
 export async function POST(req: Request) {
   try {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL + '/posts';
+    console.log('apiUrl')
     const body = await req.json();
     const { titulo, conteudo, usuarioid } = body;
 
