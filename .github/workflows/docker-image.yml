@@ -22,10 +22,6 @@ jobs:
       - name: Verificar versão do Docker
         run: docker --version
 
-      - name: Configurar variáveis de ambiente
-        env:
-          NEXT_PUBLIC_API_URL: http://blog_app:3002
-
       - name: Baixar Docker Compose v2
         run: |
           sudo apt-get update
