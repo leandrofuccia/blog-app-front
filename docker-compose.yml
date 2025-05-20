@@ -11,7 +11,9 @@ services:
       NODE_ENV: development  
       NEXT_PUBLIC_API_URL: http://blog_app:3002  # Agora acessando o back-end corretamente
     volumes:
-      - .:/app      
+      - .:/app
+      - /app/node_modules
+      - ./src/app:/app/src/app  # Mapear corretamente a pasta da aplicação    
     networks:
       - app-network  # Agora usando a mesma rede do back-end!
     restart: unless-stopped

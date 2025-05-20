@@ -13,6 +13,9 @@ RUN npm install
 # Copiando o restante do código da aplicação
 COPY . .
 
+# Definir o diretório onde a aplicação realmente está
+WORKDIR /app/src/app
+
 # Construindo a aplicação Next.js
 RUN npm run build
 
@@ -20,3 +23,7 @@ RUN npm run build
 EXPOSE 3000
 
 CMD ["npm", "run", "dev"]
+
+
+
+
