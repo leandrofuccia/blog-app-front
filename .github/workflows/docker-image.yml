@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: Deploy Next.js App
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
   workflow_dispatch:  # Permite executar manualmente pelo GitHub
 
 jobs:
-  build-and-test:
+  build:
     runs-on: ubuntu-latest
 
     steps:
