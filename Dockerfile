@@ -5,16 +5,13 @@ FROM node:23-alpine
 WORKDIR /app
 
 # Copiando apenas os arquivos necessários para instalar dependências
-COPY package.json package-lock.json /app/
+COPY package.json package-lock.json ./
 
 # Instalando as dependências
 RUN npm install
 
 # Copiando o restante do código da aplicação
 COPY . .
-
-# Definir o diretório onde a aplicação realmente está
-WORKDIR /app/src/app
 
 # Construindo a aplicação Next.js
 RUN npm run build
