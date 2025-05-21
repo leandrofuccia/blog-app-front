@@ -19,7 +19,8 @@ RUN npm run build
 # Definindo a porta e o comando de inicialização
 EXPOSE 3000
 
-CMD ["npm", "run", "dev"]
+# Iniciando o servidor de produção
+CMD ["npm", "start"]
 
 
 
