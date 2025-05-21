@@ -5,64 +5,54 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-  workflow_dispatch:  # Permite executar manualmente pelo GitHub
+  workflow_dispatch:
 
 jobs:
-  build-and-test:
+  build-and-publish:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout do código
+        uses: actions/checkout@v4
 
       - name: Configurar Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '22'
 
-      - name: Verificar versão do Docker
-        run: docker --version
-
-      - name: Baixar Docker Compose v2
+      - name: Verificar se package.json existe
         run: |
-          sudo apt-get update
-          sudo apt-get install -y curl
-          curl -SL https://github.com/docker/compose/releases/download/v2.23.0/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
-          sudo chmod +x /usr/local/bin/docker-compose
-
-      - name: Verificar instalação do Docker Compose v2
-        run: docker compose version
-
-      - name: Criar variável de timestamp
-        run: echo "TIMESTAMP=$(date +%s)" >> $GITHUB_ENV
-
-      - name: Excluir cache e node_modules
-        run: |
-          rm -rf node_modules package-lock.json
+          if [ ! -f "package.json" ]; then
+            echo "Arquivo package.json não encontrado na raiz do projeto."
+            exit 1
+          fi
 
       - name: Instalar dependências
         run: npm install
 
-      - name: Build Next.js application
+      - name: Build da aplicação Next.js
         run: npm run build
 
-      - name: Verificar container existente do compose
-        run: docker ps -a | grep blog_app_front && docker rm -f blog_app_front || true
+      - name: Criar timestamp para tag da imagem
+        run: echo "TIMESTAMP=$(date +%s)" >> $GITHUB_ENV
 
-      - name: Create Docker network
+      - name: Verificar versão do Docker
+        run: docker --version
+
+      - name: Criar rede docker (se não existir)
         run: docker network create app-network || true
 
-      - name: Build da imagem Docker
-        run: docker compose up --build -d
+      - name: Build da imagem Docker manualmente
+        run: |
+          docker build -t leandrofuccia/blog-app-front:${{ env.TIMESTAMP }} .
 
       - name: Login no Docker Hub
-        run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
-      - name: Push da imagem para o Docker Hub
+      - name: Push da imagem com tag de timestamp
         run: docker push leandrofuccia/blog-app-front:${{ env.TIMESTAMP }}
 
-      - name: Adicionar tag latest à imagem
-        run: docker tag leandrofuccia/blog-app-front:${{ env.TIMESTAMP }} leandrofuccia/blog-app-front:latest; docker push leandrofuccia/blog-app-front:latest
-
-      - name: Encerra os containers do docker compose
-        if: always()
-        run: docker compose down
+      - name: Adicionar tag latest e fazer push
+        run: |
+          docker tag leandrofuccia/blog-app-front:${{ env.TIMESTAMP }} leandrofuccia/blog-app-front:latest
+          docker push leandrofuccia/blog-app-front:latest
