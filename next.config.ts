@@ -1,7 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+ compiler: {
+    styledComponents: true, // isso ativa o suporte nativo sem precisar do Babel plugin
+  },
 };
 
 export default nextConfig;
