@@ -8,8 +8,7 @@ import axios from 'axios';
 import jwt from "jsonwebtoken";
 import { useState } from 'react';
 
-// Estilização com styled-components
-const Container = styled.div`
+const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -24,6 +23,7 @@ const StyledForm = styled(Form)`
   background: #fff;
   padding: 20px;
   border-radius: 8px;
+  width: 320px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 `;
 
@@ -32,11 +32,13 @@ const StyledField = styled(Field)`
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
+  background-color: ${(props) => (props.disabled ? '#eaeaea' : 'white')};
 `;
 
-const StyledErrorMessage = styled.p`
+const StyledErrorMessage = styled.div`
   color: red;
   font-size: 14px;
+  margin-bottom: 10px;	
 `;
 
 const Button = styled.button`
@@ -55,6 +57,7 @@ const RegisterLink = styled.p`
   margin-top: 12px;
   font-size: 14px;
   text-align: center;
+  color: #0070f3;
 
   a {
     color: #0070f3;
@@ -112,7 +115,7 @@ const LoginPage = () => {
   };
 
   return (
-    <Container>
+    <Wrapper>
       <h1>Login</h1>
       <Formik
         initialValues={{ username: '', password: '' }}
@@ -137,7 +140,7 @@ const LoginPage = () => {
           </StyledForm>
         )}
       </Formik>
-    </Container>
+    </Wrapper>
   );
 };
 
