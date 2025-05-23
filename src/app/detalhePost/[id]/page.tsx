@@ -6,9 +6,10 @@ import { useParams } from "next/navigation";
 import { IPostagem } from "@/types/postagem";
 import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
-import { MainWrapper, PostContent } from "@/components/Common";
+import { ErrorPopup, MainWrapper, PostContent } from "@/components/Common";
 import { useThemeToggle } from "@/context/ThemeContext";
 import Loading from "@/components/Loading";
+import { setRequestMeta } from "next/dist/server/request-meta";
 
 const ReadPostPage = () => {
   const [post, setPost] = useState<IPostagem | null>(null);
@@ -20,6 +21,7 @@ const ReadPostPage = () => {
     const fetchPost = async () => {
       try {
         setErrorMessage(null);
+        setIsLoading(true); 
         const token = localStorage.getItem("token");
 
         const response = await axios.get(`/api/detalhePostagem/${params.id}`, {
@@ -60,9 +62,20 @@ const ReadPostPage = () => {
     window.location.href = "/login";
   };
 
-  if (isLoading || !post) {
+  if (isLoading) {
     return <Loading />;
   }
+
+  if (errorMessage) {
+    return (
+      <ErrorPopup>
+        {errorMessage}
+        <button onClick={() => setErrorMessage(null)}>✖</button>
+      </ErrorPopup>
+    );
+  }
+
+
 
   return (
     <>
@@ -76,15 +89,21 @@ const ReadPostPage = () => {
         <Header onLogout={handleLogout} />
         <main>
           <PostContent>
-            <h2>{post.titulo}</h2>
-            <p>{post.conteudo}</p>
-            <small>Autor: {post.autorNome}</small>
+            <h2>{post?.titulo}</h2>
+            {errorMessage && (
+              <ErrorPopup>
+                {errorMessage}
+                  <button onClick={() => setErrorMessage(null)}>✖</button>
+              </ErrorPopup>
+            )}
+            <p>{post?.conteudo}</p>
+            <small>Autor: {post?.autorNome}</small>
             <small>
-              Criado em: {new Date(post.datacriacao!).toLocaleDateString()}
+              Criado em: {new Date(post?.datacriacao!).toLocaleDateString()}
             </small>
             <small>
               Atualizado em:{" "}
-              {post.dataatualizacao
+              {post?.dataatualizacao
                 ? new Date(post.dataatualizacao).toLocaleDateString()
                 : "Nunca atualizado"}
             </small>

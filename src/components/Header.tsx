@@ -116,7 +116,7 @@ const Header: React.FC<HeaderProps> = ({ onLogout }) => {
   const { toggleTheme, isDark } = useThemeToggle();
   return (
     <HeaderContainer>
-      <Title>Minha Aplicação</Title>
+      <Title>Blogging Dinâmico</Title>
       <ButtonGroup>
         <IconButton
           icon={isDark ? "/icons/sun.svg" : "/icons/moon.svg"}

@@ -97,9 +97,7 @@ const EditPostPage = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-
       setSuccessMessage("Postagem editada com sucesso!");
-
       setTimeout(() => {
         setSuccessMessage(null);
         router.push("/admin");
@@ -145,6 +143,18 @@ const EditPostPage = () => {
             <main>
               <StyledForm onSubmit={handleSubmit}>
                 <Field as={Input} name="titulo" placeholder="Título" maxLength={255} />
+                {successMessage && (
+                  <SuccessPopup>
+                  {successMessage}
+                    <button onClick={() => setSuccessMessage(null)}>✖</button>
+                  </SuccessPopup>
+                )}
+                {errorMessage && (
+                  <ErrorPopup>
+                    {errorMessage}
+                    <button onClick={() => setErrorMessage(null)}>✖</button>
+                  </ErrorPopup>
+                )}
                 <ErrorMessage name="titulo" component={ErrorText} />
 
                 <Field as={Textarea} name="conteudo" placeholder="Conteúdo" rows={10} maxLength={4000} />

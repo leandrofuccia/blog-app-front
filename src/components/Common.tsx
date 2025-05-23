@@ -196,10 +196,34 @@ export const SuccessPopup = styled.div`
     90% { opacity: 1; }
     100% { opacity: 0; transform: translateY(-10px); }
   }
+  button {
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    margin-left: 10px;  
+    color: white;  
+  }  
 `;
+
 
 export const ErrorPopup = styled(SuccessPopup)`
   background-color: #f44336; /* vermelho */
+  animation: fadeInOut 10s ease-in-out;
+  
+`;
+
+export const WarningPopup = styled(SuccessPopup)`
+  background-color: #FFFF00;
+  color: black;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  animation: fadeInOut 10s ease-in-out; 
+  button{
+    color: black;
+  }
+  
 `;
 
 const ButtonGroup = styled.div`

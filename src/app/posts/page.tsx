@@ -7,6 +7,7 @@ import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
 import { IPostagem } from "@/types/postagem";
 import {
+  ErrorPopup,
   MainWrapper,
   PostItemHover,
   PostList,
@@ -109,6 +110,12 @@ const PostsPage = () => {
         />
         <main>
           <h2>Lista de Postagens</h2>
+          {errorMessage && (
+            <ErrorPopup>
+              {errorMessage}
+                <button onClick={() => setErrorMessage(null)}>✖</button>
+            </ErrorPopup>
+          )}
           {filteredPosts.length > 0 ? (
             <PostList>
               {filteredPosts.map((post) => (

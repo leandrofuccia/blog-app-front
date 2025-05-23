@@ -15,6 +15,9 @@ import {
   ResponsiveContainer,
   MainWrapper,
   ButtonGroup,
+  SuccessPopup,
+  ErrorPopup,
+  WarningPopup,
   
   
 } from "@/components/Common";
@@ -29,11 +32,13 @@ const AdminPage = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [warningMessage, setWarningMessage] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
         setErrorMessage(null);
+        setWarningMessage(null);
         const token = localStorage.getItem("token");
         const credencialId = localStorage.getItem("credencialId");
         const response = await axios.get(`/api/usuario/${credencialId}`, {
@@ -48,8 +53,11 @@ const AdminPage = () => {
           setUserProfile(usuario.perfilid);
 
           if (usuario.perfilid !== 2) {
-            alert("Acesso restrito. Apenas professores podem acessar essa página.");
-            router.push("/posts");
+            setWarningMessage("Acesso restrito. Apenas professores podem acessar essa página.");
+            setTimeout(() => {
+                  setSuccessMessage(null);
+                  router.push("/posts");
+                }, 2000);
           }
         }
 
@@ -57,7 +65,6 @@ const AdminPage = () => {
         console.error("Erro ao verificar perfil do usuário:", error);
         const message = error?.response?.data?.message || 'Erro ao verificar perfil do usuário.';
         setErrorMessage(message);
-        alert(message);
         router.push("/login");
       }
     };
@@ -94,7 +101,7 @@ const AdminPage = () => {
         },
       });
       setPosts((prevPosts) => prevPosts.filter((post: any) => post.id !== postId));
-      alert("Postagem excuida com sucesso!");
+      setSuccessMessage("Postagem excuida com sucesso!");
       
     } catch (error: any) {
       console.error("Erro ao excluir postagem:", error);
@@ -129,6 +136,25 @@ const AdminPage = () => {
         <ResponsiveContainer>
           <HeaderActions>
             <Heading2>Administração de Postagens</Heading2>
+            {successMessage && (
+              <SuccessPopup>
+                {successMessage}
+                <button onClick={() => setSuccessMessage(null)}>✖</button>
+              </SuccessPopup>
+            )}
+            {errorMessage && (
+              <ErrorPopup>
+                {errorMessage}
+                <button onClick={() => setErrorMessage(null)}>✖</button>
+              </ErrorPopup>
+            )}
+            {warningMessage && (
+              <WarningPopup>
+                {warningMessage}
+                <button onClick={() => setWarningMessage(null)}>✖</button>
+              </WarningPopup>
+            )}
+
             <IconButton
               icon= "/icons/add.svg"
               alt=""

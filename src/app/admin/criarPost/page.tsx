@@ -18,6 +18,7 @@ import {
   MainWrapper,
   SuccessPopup,
   ErrorPopup,
+  WarningPopup,
 } from "@/components/Common";
 import Loading from "@/components/Loading";
 
@@ -33,6 +34,7 @@ const CreatePostPage = () => {
   const router = useRouter();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [warningMessage, setWarningMessage] = useState<string | null>(null);
 
   const validationSchema = Yup.object().shape({
     titulo: Yup.string()
@@ -50,8 +52,11 @@ const CreatePostPage = () => {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
-        alert("Token não encontrado. Por favor, faça login novamente.");
-        router.push("/login");
+        setErrorMessage("Token não encontrado. Por favor, faça login novamente.");
+        setTimeout(() => {
+          setSuccessMessage(null);
+          router.push("/login");
+          }, 2000);
         return;
       }
       setErrorMessage(null);
@@ -66,13 +71,19 @@ const CreatePostPage = () => {
 
       const usuario = response.data[0];
       if (usuario.perfilid !== 2) {
-        alert("Acesso restrito. Apenas professores podem acessar essa página.");
-        router.push("/posts");
+        setWarningMessage("Acesso restrito. Apenas professores podem acessar essa página.");
+        setTimeout(() => {
+          setSuccessMessage(null);
+          router.push("/posts");
+          }, 2000);
       }
     } catch (error: any) {
       const message = error?.response?.data?.message || "Erro ao verificar perfil do usuário.";
-      setErrorMessage(message);      
-      router.push("/login");
+      setErrorMessage(message);
+      setTimeout(() => {
+        setSuccessMessage(null);
+        router.push("/login");
+      }, 2000);      
     }
   };
 
@@ -120,9 +131,24 @@ const CreatePostPage = () => {
         <Header onLogout={handleLogout} />
         <main>
           <h2>Criar Nova Postagem</h2>
-          {successMessage && <SuccessPopup>{successMessage}</SuccessPopup>}
-          {errorMessage && <ErrorPopup>{errorMessage}</ErrorPopup>}
-
+         {successMessage && (
+              <SuccessPopup>
+                {successMessage}
+                <button onClick={() => setSuccessMessage(null)}>✖</button>
+              </SuccessPopup>
+            )}
+            {errorMessage && (
+              <ErrorPopup>
+                {errorMessage}
+                <button onClick={() => setErrorMessage(null)}>✖</button>
+              </ErrorPopup>
+            )}
+          {warningMessage && (
+            <WarningPopup>
+              {warningMessage}
+                <button onClick={() => setWarningMessage(null)}>✖</button>
+              </WarningPopup>
+            )}
           <Formik<FormValues>
             initialValues={{ titulo: "", conteudo: "", autorId: "" }}
             validationSchema={validationSchema}
@@ -154,7 +180,7 @@ const CreatePostPage = () => {
                 }, 2000);
               } catch (error) {
                 console.error("Erro ao criar postagem:", error);
-                alert("Erro ao criar postagem. Verifique os dados informados.");
+                setErrorMessage("Erro ao criar postagem. Verifique os dados informados.");
               }
             }}
           >

@@ -6,6 +6,7 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
 import { useState } from 'react';
+import { ErrorPopup, SuccessPopup } from '@/components/Common';
 
 const Wrapper = styled.div`
   display: flex;
@@ -73,6 +74,8 @@ const RegisterPage = () => {
   const router = useRouter();
   const [emailExists, setEmailExists] = useState(false);
   const [emailError, setEmailError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const validationSchema = Yup.object().shape({
     nome: Yup.string().required('Usuário é obrigatório'),
@@ -92,6 +95,7 @@ const RegisterPage = () => {
   ) => {
     setEmailExists(false);
     setEmailError(null);
+    setErrorMessage(null);
 
     try {
       // 1. Tentar criar credencial
@@ -126,8 +130,11 @@ const RegisterPage = () => {
         }
       );
 
-      alert('Cadastro realizado com sucesso!');
-      router.push('/login');
+      setSuccessMessage('Cadastro realizado com sucesso!');
+      setTimeout(() => {
+                  setSuccessMessage(null);
+                  router.push("/posts");
+                }, 2000);      
 
     } catch (error: any) {
       const message = error?.response?.data?.message || 'Erro ao criar usuário.';
@@ -137,7 +144,7 @@ const RegisterPage = () => {
         setEmailExists(true);
         setEmailError('Já existe uma conta com este e-mail. Cadastre outro e-mail.');
       } else {
-        alert(message);
+        setErrorMessage(message);
       }
     } finally {
       setSubmitting(false);
@@ -147,6 +154,18 @@ const RegisterPage = () => {
   return (
     <Wrapper>
       <h1>Cadastro</h1>
+       {successMessage && (
+          <SuccessPopup>
+            {successMessage}
+              <button onClick={() => setSuccessMessage(null)}>✖</button>
+          </SuccessPopup>
+        )}
+        {errorMessage && (
+          <ErrorPopup>
+            {errorMessage}
+              <button onClick={() => setErrorMessage(null)}>✖</button>
+          </ErrorPopup>
+        )}
       <Formik
         initialValues={{ nome: '', password: '', email: '', perfilid: 0 }}
         validationSchema={validationSchema}
@@ -165,6 +184,11 @@ const RegisterPage = () => {
               type="email"
               placeholder="Email"
               //disabled={emailExists}
+              onChange={(e: { target: { value: any; }; }) => {
+                setFieldValue('email', e.target.value);
+                setEmailExists(false); // Resetando estado ao alterar e-mail
+                setEmailError(null); 
+              }}
             />
             <StyledErrorMessage>
               <ErrorMessage name="email" />
