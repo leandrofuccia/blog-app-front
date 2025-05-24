@@ -22,10 +22,20 @@ export const Heading2 = styled.h2`
 export const Heading3 = styled.h3`
   font-size: ${(props) => props.theme.fontSizes.h3};
   margin-bottom: ${(props) => props.theme.spacing.sm};
-
+  padding-bottom: ${(props) => props.theme.spacing.md}; 
   @media (max-width: 768px) {
     font-size: ${(props) => props.theme.fontSizes.p};
   }
+`;
+
+export const Heading4 = styled.h2`
+ padding-top: ${(props) => props.theme.spacing.md};
+`;
+
+export const Heading5 = styled.h2`
+ padding-top: ${(props) => props.theme.spacing.md};
+ padding-bottom: ${(props) => props.theme.spacing.md};
+ text-align: center;
 `;
 
 // Parágrafos (texto normal)

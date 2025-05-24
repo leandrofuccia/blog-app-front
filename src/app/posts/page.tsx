@@ -8,6 +8,7 @@ import Sidebar from "@/components/Sidebar";
 import { IPostagem } from "@/types/postagem";
 import {
   ErrorPopup,
+  Heading3,
   MainWrapper,
   PostItemHover,
   PostList,
@@ -23,7 +24,7 @@ const PostsPage = () => {
   const router = useRouter();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-
+ 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.target.value.toLowerCase();
     setSearchQuery(query);
@@ -101,7 +102,7 @@ const PostsPage = () => {
       />
 
       <MainWrapper>
-        <Header onLogout={handleLogout} />
+         <Header onLogout={handleLogout}/>
         <SearchBar
           type="text"
           placeholder="Buscar posts por título ou conteúdo..."
@@ -109,7 +110,7 @@ const PostsPage = () => {
           onChange={handleSearch}
         />
         <main>
-          <h2>Lista de Postagens</h2>
+          <Heading3>Lista de Postagens</Heading3>
           {errorMessage && (
             <ErrorPopup>
               {errorMessage}

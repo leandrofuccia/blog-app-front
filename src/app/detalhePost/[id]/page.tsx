@@ -2,20 +2,20 @@
 
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { IPostagem } from "@/types/postagem";
 import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
 import { ErrorPopup, MainWrapper, PostContent } from "@/components/Common";
-import { useThemeToggle } from "@/context/ThemeContext";
 import Loading from "@/components/Loading";
-import { setRequestMeta } from "next/dist/server/request-meta";
+
 
 const ReadPostPage = () => {
   const [post, setPost] = useState<IPostagem | null>(null);
   const params = useParams();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -86,7 +86,7 @@ const ReadPostPage = () => {
         ]}
       />
       <MainWrapper>
-        <Header onLogout={handleLogout} />
+        <Header onLogout={handleLogout} onBack={() => router.back()}/>
         <main>
           <PostContent>
             <h2>{post?.titulo}</h2>

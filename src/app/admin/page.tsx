@@ -18,6 +18,7 @@ import {
   SuccessPopup,
   ErrorPopup,
   WarningPopup,
+  Heading4,
   
   
 } from "@/components/Common";
@@ -33,6 +34,7 @@ const AdminPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [warningMessage, setWarningMessage] = useState<string | null>(null);
+  const username = localStorage.getItem("usuario");
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -135,7 +137,7 @@ const AdminPage = () => {
         <Header onLogout={handleLogout} />
         <ResponsiveContainer>
           <HeaderActions>
-            <Heading2>Administração de Postagens</Heading2>
+            <Heading4>Administração de Postagens</Heading4>
             {successMessage && (
               <SuccessPopup>
                 {successMessage}

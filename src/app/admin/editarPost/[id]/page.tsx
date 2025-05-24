@@ -16,9 +16,10 @@ import {
   Textarea,
   SuccessPopup,
   ErrorPopup,
+  Heading5,
 } from "@/components/Common";
 import Loading from "@/components/Loading";
-import { useThemeToggle } from "@/context/ThemeContext";
+
 
 const EditPostPage = () => {
   const [autorId, setAutorId] = useState("");
@@ -31,9 +32,8 @@ const EditPostPage = () => {
   const router = useRouter();
   const params = useParams();
   const postId = params.id;
-  //const { toggleTheme } = useThemeToggle();
-
-  const validationSchema = Yup.object().shape({
+ 
+ const validationSchema = Yup.object().shape({
     titulo: Yup.string()
       .required("O título é obrigatório")
       .min(3, "O título deve ter pelo menos 3 caracteres")
@@ -128,10 +128,10 @@ const EditPostPage = () => {
         ]}
       />
       <MainWrapper>
-        <Header onLogout={handleLogout} />
+        <Header onLogout={handleLogout} onBack={() => router.back()}/>
         {successMessage && <SuccessPopup>{successMessage}</SuccessPopup>}
         {errorMessage && <ErrorPopup>{errorMessage}</ErrorPopup>}
-        <h2>Editar Postagem</h2>
+        <Heading5>Editar Postagem</Heading5>
 
         <Formik
           key={JSON.stringify(initialValues)}

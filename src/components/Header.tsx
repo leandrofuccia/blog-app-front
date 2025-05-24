@@ -1,74 +1,6 @@
-/*"use client";
+"use client"
 
-import React from "react";
-import styled from "styled-components";
-import { Title, ButtonText } from "./Typography";
-import { useThemeToggle } from "@/context/ThemeContext";
-
-const HeaderContainer = styled.header`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 24px;
-  background-color: ${(props) => props.theme.colors.background};
-  border-bottom: 1px solid ${(props) => props.theme.colors.border};
-  color: ${(props) => props.theme.colors.text};
-  margin-left: 250px; 
-  transition: all 0.3s ease;
-
-  @media (max-width: 768px) {
-    margin-left: 60px;
-  }
-`;
-
-const ButtonGroup = styled.div`
-  display: flex;
-  gap: 10px;
-`;
-
-const HeaderButton = styled.button`
-  background: transparent;
-  color: ${(props) => props.theme.colors.primary};
-  border: 1px solid ${(props) => props.theme.colors.primary};
-  padding: 6px 12px;
-  cursor: pointer;
-  border-radius: 4px;
-  transition: all 0.3s;
-
-  &:hover {
-    background-color: ${(props) => props.theme.colors.primary};
-    color: ${(props) => props.theme.colors.background};
-  }
-`;
-
-interface HeaderProps {
-  onLogout: () => void;
-}
-
-const Header: React.FC<HeaderProps> = ({ onLogout }) => {
-  const { toggleTheme } = useThemeToggle();
-
-  return (
-    <HeaderContainer>
-      <Title>Minha Aplicação</Title>
-      <ButtonGroup>
-        <HeaderButton onClick={onLogout}>
-          <ButtonText>Logout</ButtonText>
-        </HeaderButton>
-        <HeaderButton onClick={toggleTheme}>
-          <ButtonText>Alterar Tema</ButtonText>
-        </HeaderButton>
-      </ButtonGroup>
-    </HeaderContainer>
-  );
-};
-
-export default Header;
-*/
-
-"use client";
-
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Title } from "./Typography";
 import { useThemeToggle } from "@/context/ThemeContext";
@@ -79,45 +11,59 @@ const HeaderContainer = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 24px;
   background-color: ${(props) => props.theme.colors.background};
   border-bottom: 1px solid ${(props) => props.theme.colors.border};
   color: ${(props) => props.theme.colors.text};
-  margin-left: 250px;
   transition: all 0.3s ease;
+  padding: 16px 35px;
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px; /* Espaço entre os elementos */
+  }
 
   @media (max-width: 768px) {
     margin-left: 60px;
   }
 `;
 
-/*const HeaderButton = styled.button`
-  background: transparent;
-  color: ${(props) => props.theme.colors.primary};
-  border: 1px solid ${(props) => props.theme.colors.primary};
-  padding: 6px 12px;
-  cursor: pointer;
-  border-radius: 4px;
-  transition: all 0.3s;
-
-  &:hover {
-    background-color: ${(props) => props.theme.colors.primary};
-    color: ${(props) => props.theme.colors.background};
-  }
-`;
-*/
-
-
 interface HeaderProps {
   onLogout: () => void;
+  onBack?: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ onLogout }) => {
+const Header: React.FC<HeaderProps> = ({ onLogout, onBack}) => {
   const { toggleTheme, isDark } = useThemeToggle();
+  const [fullName, setUsername] = useState<string>("Usuário");
+  const username = fullName.split(" ")[0]; 
+
+  useEffect(() => {
+    const storedUsername = localStorage.getItem("usuario");
+    if (storedUsername) {
+      setUsername(storedUsername);
+    }
+    
+  }, []);
+
+
+
   return (
     <HeaderContainer>
-      <Title>Blogging Dinâmico</Title>
+      <div className="header-left">
+        {onBack && (
+          <IconButton
+            icon="/icons/back.svg"
+            alt="Voltar"
+            tooltip="Voltar"
+            label="Voltar"
+            onClick={onBack}
+          />
+        )}
+        <Title>Blogging Dinâmico</Title>
+      </div>
       <ButtonGroup>
+        <span className="username">Olá, {username}!</span>
         <IconButton
           icon={isDark ? "/icons/sun.svg" : "/icons/moon.svg"}
           alt=""
@@ -126,11 +72,11 @@ const Header: React.FC<HeaderProps> = ({ onLogout }) => {
           onClick={toggleTheme}
         />
         <IconButton
-          icon= "/icons/logout.png"
+          icon="/icons/logout.png"
           alt=""
           tooltip="Logout"
           label="Logout"
-          showLabel="none" // "side", "below" ou "none"
+          showLabel="none"
           onClick={onLogout}
         />
       </ButtonGroup>

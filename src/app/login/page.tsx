@@ -106,6 +106,20 @@ const LoginPage = () => {
       localStorage.setItem('token', response.data.token);
       const credencialId = decodeToken(response.data.token);
       localStorage.setItem('credencialId', credencialId);
+      
+      const usuarioResponse = await axios.get(`/api/usuario/${credencialId}`, {
+          headers: {
+            Authorization: `Bearer ${response.data.token}`,
+          },
+      });
+
+      if (usuarioResponse.data && usuarioResponse.data.length > 0) {
+          const usuario = usuarioResponse.data[0];
+          console.log("Usuário encontrado:", usuario);
+         if (usuario?.nome) {
+            localStorage.setItem('usuario', usuario.nome);            
+          }
+      }
 
       router.push('/posts');
     } catch (error: any) {

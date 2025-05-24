@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Heading2, Heading3, Paragraph } from "./Typography"; // Importe os componentes de tipografia
+import { Heading2, Heading3, Heading4, Heading5, Paragraph } from "./Typography"; // Importe os componentes de tipografia
 
 // Container principal
 export const Container = styled.div`
@@ -165,7 +165,7 @@ export const ParagraphStyled = styled(Paragraph)`
   font-size: ${(props) => props.theme.fontSizes.p};
 `;
 
-export { Heading2, Heading3, Paragraph, ButtonGroup };
+export { Heading2, Heading3, Heading4, Heading5, Paragraph, ButtonGroup };
 
 export const MainWrapper = styled.div`
   margin-left: 250px;

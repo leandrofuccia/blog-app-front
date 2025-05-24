@@ -19,6 +19,9 @@ import {
   SuccessPopup,
   ErrorPopup,
   WarningPopup,
+  Heading3,
+  Heading4,
+  Heading5,
 } from "@/components/Common";
 import Loading from "@/components/Loading";
 
@@ -128,9 +131,9 @@ const CreatePostPage = () => {
         ]}
       />
       <MainWrapper>
-        <Header onLogout={handleLogout} />
+        <Header onLogout={handleLogout} onBack={() => router.back()}/>
         <main>
-          <h2>Criar Nova Postagem</h2>
+          <Heading5>Criar Nova Postagem</Heading5>
          {successMessage && (
               <SuccessPopup>
                 {successMessage}
@@ -209,16 +212,11 @@ const CreatePostPage = () => {
                     ))}
                 </Field>
                 <ErrorMessage name="autorId" component={ErrorText} />
-
-                <div style={{ display: "flex", gap: "1rem", marginTop: "1rem" }}>
                   <Button type="submit">Criar Postagem</Button>
-                  <Button type="button" onClick={() => resetForm()} style={{ background: "#ccc" }}>
-                    Limpar
+                   <br/>
+                   <Button type="button" onClick={() => resetForm()} style={{ background: "#ccc" }}>
+                      Limpar
                   </Button>
-                  <Button type="button" onClick={() => router.push("/admin")} style={{ background: "#888" }}>
-                    Voltar
-                  </Button>
-                </div>
               </StyledForm>
             )}
           </Formik>
