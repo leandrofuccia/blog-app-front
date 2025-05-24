@@ -34,8 +34,7 @@ const AdminPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [warningMessage, setWarningMessage] = useState<string | null>(null);
-  const username = localStorage.getItem("usuario");
-
+  
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
