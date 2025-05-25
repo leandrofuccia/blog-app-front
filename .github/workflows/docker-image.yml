@@ -38,10 +38,7 @@ jobs:
 
       - name: Verificar versão do Docker
         run: docker --version
-
-      - name: Criar rede docker (se não existir)
-        run: docker network create app-network || true
-
+      
       - name: Build da imagem Docker manualmente
         run: |
           docker build -t leandrofuccia/blog-app-front:${{ env.TIMESTAMP }} .
