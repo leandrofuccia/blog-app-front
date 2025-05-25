@@ -9,9 +9,9 @@ services:
       - "3000:3000"
     environment:
       NODE_ENV: development  
-      NEXT_PUBLIC_API_URL: http://blog_app:3002  # Agora acessando o back-end corretamente     
+      NEXT_PUBLIC_API_URL: http://blog_app:3002
     networks:
-      - app-network  # Agora usando a mesma rede do back-end!
+      - app-network
     restart: unless-stopped
 
 networks:
