@@ -17,7 +17,7 @@ const RegisterPage = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const validationSchema = Yup.object().shape({
-    nome: Yup.string().required('Usuário é obrigatório'),
+    nome: Yup.string().required('Nome é obrigatório'),
     password: Yup.string().min(4, 'Mínimo de 4 caracteres').required('Senha é obrigatória'),
     email: Yup.string().email('Email inválido').required('Email é obrigatório'),
     perfilid: Yup.number().moreThan(0, 'Perfil é obrigatório').required('Perfil é obrigatório'),
@@ -117,7 +117,7 @@ const RegisterPage = () => {
         {({ setFieldValue, isSubmitting, values }) => (
            <Form style={{ width: '100%' }}>
             
-              <StyledField name="nome" type="text" placeholder="Usuário" />
+              <StyledField name="nome" type="text" placeholder="Nome" />
               <StyledErrorMessage><ErrorMessage name="nome" /></StyledErrorMessage>
 
               <StyledField name="password" type="password" placeholder="Senha" />

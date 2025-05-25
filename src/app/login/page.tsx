@@ -11,9 +11,10 @@ import jwt from "jsonwebtoken";
 const LoginPage = () => {
   const router = useRouter();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [emailError, setEmailError] = useState<string | null>(null);
  
   const validationSchema = Yup.object().shape({
-    username: Yup.string().required('Nome de usuário é obrigatório'),
+    email: Yup.string().email('Email inválido').required('Email é obrigatório'),
     password: Yup.string().required('Senha é obrigatória'),
   });
 
@@ -27,14 +28,14 @@ const LoginPage = () => {
       return null;
     }
   };
-
-  const handleSubmit = async (values: { username: string; password: string }) => {
+  
+  const handleSubmit = async (values: { email: string; password: string }) => {
     setErrorMessage(null); // Limpa mensagem anterior ao tentar novo login
-
+    setEmailError(null);
     try {
       const response = await axios.post(
         '/api/login',
-        { username: values.username, password: values.password },
+        { username: values.email, password: values.password },
         {
           headers: { 'Content-Type': 'application/json' },
         }
@@ -73,11 +74,21 @@ const LoginPage = () => {
           <h1>Login</h1>
         </Header>
 
-        <Formik initialValues={{ username: '', password: '' }} validationSchema={validationSchema} onSubmit={handleSubmit}>
-          {() => (
+        <Formik 
+          initialValues={{ email: '', password: '' }} 
+          validationSchema={validationSchema} 
+          onSubmit={handleSubmit}>
+           {({ setFieldValue, isSubmitting, values }) => (
             <Form style={{ width: '100%' }}>
-              <StyledField name="username" type="text" placeholder="Nome de usuário" />
-              <StyledErrorMessage><ErrorMessage name="username" /></StyledErrorMessage>
+              <StyledField 
+                name="email" 
+                type="email" 
+                placeholder="Email" 
+                onChange={(e: { target: { value: any; }; }) => {
+                  setFieldValue('email', e.target.value);
+                  setEmailError(null); 
+                }}/>
+              <StyledErrorMessage><ErrorMessage name="email" /></StyledErrorMessage>
 
               <StyledField name="password" type="password" placeholder="Senha" />
               <StyledErrorMessage><ErrorMessage name="password" /></StyledErrorMessage>
