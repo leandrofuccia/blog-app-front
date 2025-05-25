@@ -6,7 +6,7 @@ import { useParams, useRouter } from "next/navigation";
 import { IPostagem } from "@/types/postagem";
 import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
-import { ErrorPopup, MainWrapper, PostContent } from "@/components/Common";
+import { ErrorPopup, Heading3, MainWrapper, Paragraph, PostContent } from "@/components/Common";
 import Loading from "@/components/Loading";
 
 
@@ -89,24 +89,22 @@ const ReadPostPage = () => {
         <Header onLogout={handleLogout} onBack={() => router.back()}/>
         <main>
           <PostContent>
-            <h2>{post?.titulo}</h2>
+            <Heading3>{post?.titulo}</Heading3>
             {errorMessage && (
               <ErrorPopup>
                 {errorMessage}
                   <button onClick={() => setErrorMessage(null)}>✖</button>
               </ErrorPopup>
             )}
-            <p>{post?.conteudo}</p>
-            <small>Autor: {post?.autorNome}</small>
-            <small>
-              Criado em: {new Date(post?.datacriacao!).toLocaleDateString()}
-            </small>
-            <small>
-              Atualizado em:{" "}
+            <Paragraph>{post?.conteudo}</Paragraph>
+            <Paragraph>Autor: {post?.autorNome}</Paragraph>           
+            <Paragraph>
+              <span>Criado em: {new Date(post?.datacriacao!).toLocaleDateString()}</span>
+              <span>Atualizado em:{" "}
               {post?.dataatualizacao
                 ? new Date(post.dataatualizacao).toLocaleDateString()
-                : "Nunca atualizado"}
-            </small>
+                : "Nunca atualizado"} </span>
+            </Paragraph>
           </PostContent>
         </main>
       </MainWrapper>

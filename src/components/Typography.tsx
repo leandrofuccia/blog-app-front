@@ -40,6 +40,8 @@ export const Heading5 = styled.h2`
 
 // Parágrafos (texto normal)
 export const Paragraph = styled.p`
+  display: flex;
+  gap: 16px; 
   font-size: ${(props) => props.theme.fontSizes.p};
   margin-bottom: ${(props) => props.theme.spacing.sm};
 
