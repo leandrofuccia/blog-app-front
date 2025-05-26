@@ -25,23 +25,13 @@ const SidebarWrapper = styled.div<{ $isOpen: boolean }>`
   z-index: 1000;
   width: 250px;
 
-  /* Mobile: oculta se !$isOpen */
   transform: translateX(${({ $isOpen }) => ($isOpen ? "0" : "-100%")});
 
   @media (min-width: 768px) {
-    transform: translateX(0); /* Sempre visível no desktop */
+    transform: translateX(0);
   }
 `;
 
-/*const MainWrapper = styled.main`
-  margin-left: 250px;
-  padding: 16px;
-
-  @media (max-width: 768px) {
-    margin-left: 0;
-  }
-`;
-*/
 const ToggleButton = styled.button`
   position: fixed;
   top: 16px;

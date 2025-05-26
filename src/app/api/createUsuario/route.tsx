@@ -30,7 +30,6 @@ export async function POST(req: Request) {
       );
     }
 
-    //const response = await axios.post("http://blog_app:3002/usuario",
     const response = await axios.post(apiUrl,
       { nome, perfilid, credencialId },
       {

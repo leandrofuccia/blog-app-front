@@ -9,7 +9,7 @@ export const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: linear-gradient(135deg, #0070f3, #005bb5); /* Gradiente sutil */
+  background: linear-gradient(135deg, #0070f3, #005bb5);
 `;
 
 export const Card = styled.div`

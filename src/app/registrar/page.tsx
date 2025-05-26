@@ -1,8 +1,7 @@
-'use client';
+"use client";
 
 import { useRouter } from 'next/navigation';
-import styled from 'styled-components';
-import { Formik, Field, Form, ErrorMessage } from 'formik';
+import { Formik, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
 import { useState } from 'react';
@@ -37,7 +36,6 @@ const RegisterPage = () => {
     setErrorMessage(null);
 
     try {
-      // 1. Tentar criar credencial
       const credRes = await axios.post('/api/createCredencial', {
         username: values.email,
         password: values.password,
@@ -45,7 +43,6 @@ const RegisterPage = () => {
 
       const credencialId = credRes.data.id;
 
-      // 2. Logar e obter token
       const signinResp = await axios.post('/api/login', {
         username: values.email,
         password: values.password,
@@ -54,7 +51,6 @@ const RegisterPage = () => {
       const token = signinResp.data.token;
       localStorage.setItem('token', token);
 
-      // 3. Criar usuário
       await axios.post(
         '/api/createUsuario',
         {
@@ -78,7 +74,6 @@ const RegisterPage = () => {
     } catch (error: any) {
       const message = error?.response?.data?.message || 'Erro ao criar usuário.';
 
-      // Se o erro for de e-mail duplicado (credencial existente)
       if (message.toLowerCase().includes('username') || message.toLowerCase().includes('email')) {
         setEmailExists(true);
         setEmailError('Já existe uma conta com este e-mail. Cadastre outro e-mail.');
@@ -127,10 +122,9 @@ const RegisterPage = () => {
                 name="email"
                 type="email"
                 placeholder="Email"
-                //disabled={emailExists}
                 onChange={(e: { target: { value: any; }; }) => {
                   setFieldValue('email', e.target.value);
-                  setEmailExists(false); // Resetando estado ao alterar e-mail
+                  setEmailExists(false);
                   setEmailError(null); 
                 }}
               />

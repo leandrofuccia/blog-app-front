@@ -19,8 +19,6 @@ import {
   SuccessPopup,
   ErrorPopup,
   WarningPopup,
-  Heading3,
-  Heading4,
   Heading5,
 } from "@/components/Common";
 import Loading from "@/components/Loading";
@@ -176,7 +174,6 @@ const CreatePostPage = () => {
                 setSuccessMessage("Postagem criada com sucesso!");
                 resetForm();
 
-                // Aguarda 2 segundos antes de redirecionar
                 setTimeout(() => {
                   setSuccessMessage(null);
                   router.push("/admin");

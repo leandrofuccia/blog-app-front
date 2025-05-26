@@ -1,4 +1,3 @@
-/*Arquivo para executar o gitActions*/
 import React from "react";
 
 const PaginaSimples: React.FC = () => {

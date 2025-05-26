@@ -24,7 +24,6 @@ export async function POST(req: Request) {
       );
     }
 
-    //const response = await axios.post("http://localhost:3002/posts",
     const response = await axios.post(apiUrl,
       { titulo, conteudo, usuarioid },
       {

@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useRouter } from 'next/navigation';
 import { Formik, Form, ErrorMessage } from 'formik';
@@ -30,7 +30,7 @@ const LoginPage = () => {
   };
   
   const handleSubmit = async (values: { email: string; password: string }) => {
-    setErrorMessage(null); // Limpa mensagem anterior ao tentar novo login
+    setErrorMessage(null);
     setEmailError(null);
     try {
       const response = await axios.post(

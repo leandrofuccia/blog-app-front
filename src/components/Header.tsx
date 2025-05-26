@@ -20,7 +20,7 @@ const HeaderContainer = styled.header`
   .header-left {
     display: flex;
     align-items: center;
-    gap: 12px; /* Espaço entre os elementos */
+    gap: 12px; 
   }
 
   @media (max-width: 768px) {

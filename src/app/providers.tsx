@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { ThemeContextProvider } from "@/context/ThemeContext";
 

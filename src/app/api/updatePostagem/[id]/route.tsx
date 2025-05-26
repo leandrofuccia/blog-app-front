@@ -5,7 +5,7 @@ export async function PUT(req: NextRequest) {
   try {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL + '/posts/';
     const url = new URL(req.url);
-    const id = url.pathname.split("/").pop(); // Extrai o ID da URL
+    const id = url.pathname.split("/").pop();
     const body = await req.json();
 
     if (!id) {
@@ -17,7 +17,6 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json({ message: "Token não fornecido" }, { status: 401 });
     }
 
-    //const response = await axios.put(`http://localhost:3002/posts/${id}`, 
     const response = await axios.put(apiUrl+`${id}`,
     body,
       {

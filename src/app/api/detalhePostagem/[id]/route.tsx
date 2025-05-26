@@ -6,7 +6,7 @@ export async function GET(req: Request) {
   try {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL + '/posts/';
     const url = new URL(req.url);
-    const id = url.pathname.split("/").pop(); // Extrai o ID da URL
+    const id = url.pathname.split("/").pop();
     console.log('entrou aqui datalhePostagem route.tsx')
 
     if (!id) {
@@ -18,15 +18,12 @@ export async function GET(req: Request) {
       return NextResponse.json({ message: "Token não fornecido" }, { status: 401 });
     }
 
-    // Faz a chamada ao back-end para buscar a postagem
-    //const response = await axios.get(`http://localhost:3002/posts/${id}`, {
     const response = await axios.get(apiUrl+ `${id}`, {
       headers: {
         Authorization: token,
       },
     });
 
-    // Retorna os dados da postagem para o front-end
     return NextResponse.json(response.data, { status: 200 });
   } catch (error: any) {
     const message = error?.response?.data?.message || 'Erro ao buscar postagem';

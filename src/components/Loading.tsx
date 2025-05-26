@@ -8,7 +8,7 @@ const LoadingContainer = styled.div`
 `;
 
 const LoadingImage = styled.img`
-  width: 50px; /* Ajuste o tamanho da imagem */
+  width: 50px; 
   height: 50px;
   animation: spin 1s linear infinite;
 

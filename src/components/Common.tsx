@@ -1,7 +1,6 @@
 import styled from "styled-components";
-import { Heading2, Heading3, Heading4, Heading5, Paragraph } from "./Typography"; // Importe os componentes de tipografia
+import { Heading2, Heading3, Heading4, Heading5, Paragraph } from "./Typography";
 
-// Container principal
 export const Container = styled.div`
   margin-left: 200px;
   padding: 20px;
@@ -10,7 +9,6 @@ export const Container = styled.div`
   min-height: 100vh;
 `;
 
-// Formulário estilizado
 export const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
@@ -18,7 +16,6 @@ export const StyledForm = styled.form`
   margin: 0 auto;
 `;
 
-// Campo de entrada
 export const Input = styled.input`
   margin-bottom: 15px;
   padding: 10px;
@@ -28,7 +25,6 @@ export const Input = styled.input`
   color: ${(props) => props.theme.colors.text};
 `;
 
-// Área de texto
 export const Textarea = styled.textarea`
   margin-bottom: 15px;
   padding: 10px;
@@ -38,7 +34,6 @@ export const Textarea = styled.textarea`
   color: ${(props) => props.theme.colors.text};
 `;
 
-// Botão
 export const Button = styled.button`
   padding: ${(props) => props.theme.spacing.sm};
   font-size: ${(props) => props.theme.fontSizes.md};
@@ -87,7 +82,6 @@ export const PostList = styled.ul`
   padding: 0;
 `;
 
-// Base PostItem com estilos compartilhados
 export const BasePostItem = styled.li`
   border: 1px solid ${(props) => props.theme.colors.border};
   border-radius: 5px;
@@ -97,7 +91,6 @@ export const BasePostItem = styled.li`
   color: ${(props) => props.theme.colors.text};
 `;
 
-// PostItem com hover
 export const PostItemHover = styled(BasePostItem)`
   cursor: pointer;
 
@@ -107,7 +100,6 @@ export const PostItemHover = styled(BasePostItem)`
   }
 `;
 
-// PostItem com flex display
 export const PostItemFlex = styled(BasePostItem)`
   display: flex;
   flex-direction: column;
@@ -121,13 +113,11 @@ export const PostItemFlex = styled(BasePostItem)`
   }
 `;
 
-// Texto de erro
 export const ErrorText = styled.div`
   color: red;
   margin-bottom: 10px;
 `;
 
-// Container com padding lateral responsivo
 export const ResponsiveContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -139,7 +129,6 @@ export const ResponsiveContainer = styled.div`
   }
 `;
 
-// Cabeçalho com botão de ação (ex: Criar Post)
 export const HeaderActions = styled.div`
   display: flex;
   justify-content: space-between;
@@ -152,7 +141,6 @@ export const HeaderActions = styled.div`
   }
 `;
 
-// Usando componentes de tipografia
 export const Heading2Styled = styled(Heading2)`
   font-size: ${(props) => props.theme.fontSizes.h2};
 `;
@@ -176,12 +164,11 @@ export const MainWrapper = styled.div`
   }
 `;
 
-
 export const SuccessPopup = styled.div`
   position: fixed;
   top: 20px;
   right: 20px;
-  background-color: #4caf50; // verde sucesso
+  background-color: #4caf50;
   color: white;
   padding: 16px 24px;
   border-radius: 8px;
@@ -206,9 +193,8 @@ export const SuccessPopup = styled.div`
   }  
 `;
 
-
 export const ErrorPopup = styled(SuccessPopup)`
-  background-color: #f44336; /* vermelho */
+  background-color: #f44336;
   animation: fadeInOut 10s ease-in-out;
   
 `;
@@ -231,9 +217,3 @@ const ButtonGroup = styled.div`
   gap: 10px;
   align-items: center;
 `;
-
-
-
-
-
-
