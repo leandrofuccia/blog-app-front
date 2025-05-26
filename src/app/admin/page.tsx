@@ -6,7 +6,6 @@ import axios from "axios";
 import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
 import {
-  Heading2,
   Heading3,
   Paragraph,  
   PostItemFlex,
@@ -22,7 +21,6 @@ import {
   
   
 } from "@/components/Common";
-import { useThemeToggle } from "@/context/ThemeContext";
 import Loading from "@/components/Loading";
 import IconButton from "@/components/IconButton";
 
